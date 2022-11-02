@@ -1,0 +1,1 @@
+//all constant variables and functions goes here
