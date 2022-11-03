@@ -6,6 +6,7 @@ import 'package:uee_taprobane/screens/DeliveryPerson/delivery_person_home.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/foriegn_user_home.dart';
 import 'package:uee_taprobane/screens/Merchant/merchant_home.dart';
 import 'package:uee_taprobane/screens/WholeSaleBuyer/wholesale_buyer_home.dart';
+import 'package:uee_taprobane/screens/auth/register_selection_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -136,8 +137,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  addVerticalSpace(20),
+                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: TextButton(
+                      child:const Text(
+                                    "New to the App Sign up From Here ? Sign Up",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                    ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>  RegisterSelectionHome(),
+                          ),
+                        );
+                      
+                      } ,
+                    ),
+                  ),
                   Padding(
-                    padding: EdgeInsets.only(top: size.height * 0.15),
+                    padding: const EdgeInsets.all(20),
                     child: ElevatedButton(
                       onPressed: () {
                         login();
