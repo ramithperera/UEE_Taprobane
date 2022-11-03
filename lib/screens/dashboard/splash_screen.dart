@@ -9,6 +9,7 @@ import 'package:uee_taprobane/screens/ForiegnUser/foriegn_user_home.dart';
 import 'package:uee_taprobane/screens/Merchant/merchant_home.dart';
 import 'package:uee_taprobane/screens/WholeSaleBuyer/wholesale_buyer_home.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
+import 'package:uee_taprobane/screens/auth/register_selection_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       String? userRole = prefs.getString("userRole");
       if(token!.isEmpty){
         Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                context, MaterialPageRoute(builder: (context) => RegisterSelectionHome()));
       }
       else
       {
@@ -96,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginScreen(),
+            builder: (context) => RegisterSelectionHome(),
             // settings: RouteSettings(arguments: user),
           ));
     });
