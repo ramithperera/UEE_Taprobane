@@ -1,5 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:uee_taprobane/controller/auth_route.dart';
+import 'package:uee_taprobane/models/logged_user.dart';
+import 'package:uee_taprobane/screens/DeliveryPerson/delivery_person_home.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/foriegn_user_home.dart';
+import 'package:uee_taprobane/screens/Merchant/merchant_home.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/wholesale_buyer_home.dart';
+import 'package:uee_taprobane/screens/auth/register_selection_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -130,8 +137,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
+                  addVerticalSpace(20),
+                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: TextButton(
+                      child:const Text(
+                                    "New to the App Sign up From Here ? Sign Up",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                    ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>  RegisterSelectionHome(),
+                          ),
+                        );
+                      
+                      } ,
+                    ),
+                  ),
                   Padding(
-                    padding: EdgeInsets.only(top: size.height * 0.15),
+                    padding: const EdgeInsets.all(20),
                     child: ElevatedButton(
                       onPressed: () {
                         login();
@@ -157,43 +185,51 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void login() async {
-    // if (!validateEmail(emailController.text)) {
-    //   showToastMessage('Enter valid email!');
-    // }
-    // if (passwordController.text.isEmpty) {
-    //   showToastMessage('Password cannot be empty!');
-    // }
-    // else
-    // {
-    //   Map<String, String> body = {
-    //     "email": emailController.text,
-    //     "password": passwordController.text
-    //   };
+    if (!validateEmail(emailController.text)) {
+      showToastMessage('Enter valid email!');
+    }
+    if (passwordController.text.isEmpty) {
+      showToastMessage('Password cannot be empty!');
+    }
+    else
+    {
+      Map<String, String> body = {
+        "email": emailController.text,
+        "password": passwordController.text
+      };
 
-    //   String? response = await userLogin(context, body);
-    //   // print("response print");
-    //   // print(response);
-    //   if (response != null) {
-    //     var loggedUser = LoggedUser.fromJson(jsonDecode(response));
-    //     showToastMessage('Login Success!');
-    //     saveLoggedUser(loggedUser.data);
-    //     if(loggedUser.data!.userRole == "site_manager")
-    //     {
-    //     Navigator.push(
-    //             context, MaterialPageRoute(builder: (context) => SiteManagerHome()));
-    //     }
-    //     if(loggedUser.data!.userRole == "supplier")
-    //     {
-    //     Navigator.push(
-    //             context, MaterialPageRoute(builder: (context) => SupplierHome()));
-    //     }
-    //   }
-    //   else
-    //   {
-    //     showToastMessage('Login failed.Try again!');
-    //   }
-    // }
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (context) => SupplierHome()));
+      String? response = await userLogin(context, body);
+      // print("response print");
+      // print(response);
+      if (response != null) {
+        var loggedUser = LoggedUser.fromJson(jsonDecode(response));
+        showToastMessage('Login Success!');
+        saveLoggedUser(loggedUser.data);
+        if(loggedUser.data!.userRole == "foreign_user")
+        {
+        Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ForignUserHome()));
+        }
+        if(loggedUser.data!.userRole == "wholesale_buyer")
+        {
+        Navigator.push(
+                context, MaterialPageRoute(builder: (context) => WholeSaleBuyerHome()));
+        }
+        if(loggedUser.data!.userRole == "merchant")
+        {
+        Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MerchantHome()));
+        }
+        if(loggedUser.data!.userRole == "delivery_person")
+        {
+        Navigator.push(
+                context, MaterialPageRoute(builder: (context) => DeliveryPersonHome()));
+        }
+      }
+      else
+      {
+        showToastMessage('Login failed.Try again!');
+      }
+    }
   }
 }
