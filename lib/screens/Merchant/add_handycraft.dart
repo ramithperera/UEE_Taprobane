@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/product_route.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
+import 'package:uee_taprobane/custom/custom_failed_screen.dart';
+import 'package:uee_taprobane/custom/custom_success_screeen.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
@@ -315,24 +317,27 @@ class _AddHandycraftState extends State<AddHandycraft> {
                 child: Align(
                   alignment: FractionalOffset.bottomCenter,
                   child: ElevatedButton(
-                      onPressed: () {
-                        
-                      },
-                      child: Text(
-                        'Add Handicraft',
-                        style: GoogleFonts.roboto(
-                            textStyle: const TextStyle(
-                          color: color33,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                          fontSize: 24.0,
-                        )),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: Size(size.width * 0.8, 60),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20))),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CustomFailedScreen(role: 'Handicraft', status: 'Added',)));
+                    },
+                    child: Text(
+                      'Add Handicraft',
+                      style: GoogleFonts.roboto(
+                          textStyle: const TextStyle(
+                        color: color33,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 24.0,
+                      )),
                     ),
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(size.width * 0.8, 60),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                  ),
                 ),
               ),
             ],
