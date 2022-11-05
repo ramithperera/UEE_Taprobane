@@ -30,11 +30,11 @@ class _LoginScreenState extends State<LoginScreen> {
           margin: const EdgeInsets.all(0),
           height: size.height,
           width: size.width,
-          child: SingleChildScrollView(
-            child: Container(
-              height: size.height,
-              width: size.width,
-              padding: const EdgeInsets.all(16),
+          child: Container(
+            height: size.height,
+            width: size.width,
+            padding: const EdgeInsets.all(16),
+            child: SingleChildScrollView(
               child: Column(
                 children: [
                   addVerticalSpace(60),
@@ -138,24 +138,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   addVerticalSpace(20),
-                   Padding(
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: TextButton(
-                      child:const Text(
-                                    "New to the App Sign up From Here ? Sign Up",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
-                                    ),
+                      child: const Text(
+                        "New to the App Sign up From Here ? Sign Up",
+                        style:
+                            TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>  RegisterSelectionHome(),
+                            builder: (context) => RegisterSelectionHome(),
                           ),
                         );
-                      
-                      } ,
+                      },
                     ),
                   ),
                   Padding(
@@ -232,6 +230,6 @@ class _LoginScreenState extends State<LoginScreen> {
     //   }
     // }
     Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MerchantHome()));
+        context, MaterialPageRoute(builder: (context) => MerchantHome()));
   }
 }
