@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/item_route.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 
@@ -84,7 +85,7 @@ class _ForignUserHomeState extends State<ForignUserHome> {
                       ),
                     ),
                   const  Padding(
-                    padding: EdgeInsets.only(right:20),
+                    padding: EdgeInsets.only(right:10),
                     child: Text(
                       'Taprobane',
                       style: TextStyle(
@@ -94,6 +95,38 @@ class _ForignUserHomeState extends State<ForignUserHome> {
                       ),
                     ),
                   ),            
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+              crossAxisAlignment: CrossAxisAlignment.center ,
+              children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      width: size.width *0.2,
+                      child:const  Icon(
+                            Icons.storage_sharp,
+                            size : 40 ,
+                          ),
+                      ),
+                    ),
+                   Padding(
+                    padding: EdgeInsets.only(right:10),
+                    child: Container(
+                      width: size.width * 0.70,
+                      height: size.height * 0.055,
+                      child: TextFormField(                        
+                        decoration:const InputDecoration(
+                        hintText: "Search",
+                        suffixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(1)),
+                        ),
+                      ), 
+                      ),
+                    ),
+                  ), 
               ],
             ),
             const SizedBox(height: 20,),
@@ -187,7 +220,10 @@ class _ForignUserHomeState extends State<ForignUserHome> {
                                             style: ButtonStyle(
                                               backgroundColor: MaterialStateProperty.all<Color>(colorGreen),
                                             ),
-                                            onPressed: null, 
+                                            onPressed: ()=>{
+                                              Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) => ViewSelectedItem(itemModel: items[index], mapKey: UniqueKey(),),)),                                            
+                                            }, 
                                             child: const Text(
                                               "Add to cart",
                                               style: TextStyle(
