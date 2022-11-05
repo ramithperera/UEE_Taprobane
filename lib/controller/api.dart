@@ -9,4 +9,6 @@ class Api {
   static const String registerApi = "/taprobane/signup";
   static const String uploadProductImageApi = "/taprobane/product";
 
+  static const String getAllItems = "/item/getAllItems";
+
 }
