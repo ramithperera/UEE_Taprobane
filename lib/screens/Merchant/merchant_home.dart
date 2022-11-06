@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/screens/Merchant/add_handycraft.dart';
 import 'package:uee_taprobane/screens/Merchant/order_list.dart';
+import 'package:uee_taprobane/screens/Merchant/view_handicraft.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
+import 'package:uee_taprobane/screens/profile/profile_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -97,7 +99,12 @@ class _MerchantHomeState extends State<MerchantHome> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewHandicraft()));
+                  },
                   child: Text(
                     'View Handicrafts',
                     style: GoogleFonts.roboto(
@@ -158,9 +165,14 @@ class _MerchantHomeState extends State<MerchantHome> {
                           borderRadius: BorderRadius.circular(20))),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileScreen()));
+                  },
                   child: Text(
-                    'Sign out',
+                    'Profile',
                     style: GoogleFonts.roboto(
                         textStyle: const TextStyle(
                       color: color33,
