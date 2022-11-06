@@ -11,6 +11,7 @@ import 'package:uee_taprobane/custom/custom_success_screeen.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/models/cardModel.dart';
 import 'package:uee_taprobane/models/deliveryAddressModel.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/Delivery_details_update_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/Order_confirm_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
@@ -303,10 +304,10 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                           children: [
                                             TextButton(                              
                                               onPressed: ()=>{
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(builder: (context) => CustomSuccessScreen( role: userName, status: "payment", )),
-                                                // )                                
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => DeliveryDetailsUpdate()),
+                                                )                                
                                               }, 
                                               child: const Text(
                                                 "Edit Delivery Details",

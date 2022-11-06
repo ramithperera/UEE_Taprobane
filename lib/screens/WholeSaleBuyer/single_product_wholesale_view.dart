@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/normal_cart_screen.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/wholeSale_cart_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 
-class ViewSelectedItem extends StatefulWidget {
+class ViewSelectedWholeSaleItem extends StatefulWidget {
   final ItemModel itemModel;
   final Key mapKey;
 
-  const ViewSelectedItem(
+  const ViewSelectedWholeSaleItem(
       {required this.itemModel,
       required this.mapKey})
       : super(key: mapKey);
 
   @override
-  createState() => new ViewSelectedItemState();
+  createState() => new ViewSelectedWholeSaleItemState();
 }
 
-class ViewSelectedItemState extends State<ViewSelectedItem> {
+class ViewSelectedWholeSaleItemState extends State<ViewSelectedWholeSaleItem> {
   
   ItemModel itemModel = ItemModel();
   int item_quantity = 1;
@@ -346,7 +347,7 @@ class ViewSelectedItemState extends State<ViewSelectedItem> {
                                 onPressed: ()=>{
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => NormalCartScreen( itemModel: itemModel, quantity: item_quantity ,  mapKey: UniqueKey(), )),
+                                    MaterialPageRoute(builder: (context) => WholeSaleCartScreen( itemModel: itemModel, quantity: item_quantity ,  mapKey: UniqueKey(), )),
                                   )                                
                                 }, 
                                 child: const Text(

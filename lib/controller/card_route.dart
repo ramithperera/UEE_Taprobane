@@ -21,3 +21,46 @@ Future<dynamic> getCardDetailsOfLoggedCustomer(context , id) async {
     return null;
   }
 }
+
+Future<String?> userCardInsert(context, body) async {
+  Uri uri = Uri.http(Api.baseUrl, Api.createNewCard);
+
+  showLoadingDialog(context);
+  var response = await http.post(uri,
+      headers: {"Accept": "application/json"}, body: body);
+  hideDialog(context);
+  if (response.statusCode == 200) {
+    return response.body;
+  } else if (response.statusCode == 404) {
+    showToastMessage(jsonDecode(response.body)["message"]);
+    return null;
+  } else if (response.statusCode == 401) {
+    showToastMessage(jsonDecode(response.body)["message"]);
+    return null;
+  } else {
+    showToastMessage('Insert Card failed.Try again!');
+    return null;
+  }
+}
+
+Future<String?> userCardUpdate(context, body , id) async {
+  Uri uri = Uri.http(Api.baseUrl, Api.updateCard + id);
+
+  showLoadingDialog(context);
+  var response = await http.put(uri,
+      headers: {"Accept": "application/json"}, body: body);
+  hideDialog(context);
+  print(response.toString());
+  if (response.statusCode == 200) {
+    return response.body;
+  } else if (response.statusCode == 404) {
+    showToastMessage(jsonDecode(response.body)["message"]);
+    return null;
+  } else if (response.statusCode == 401) {
+    showToastMessage(jsonDecode(response.body)["message"]);
+    return null;
+  } else {
+    showToastMessage('Insert Card failed.Try again!');
+    return null;
+  }
+}
