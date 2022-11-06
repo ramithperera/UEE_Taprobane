@@ -24,6 +24,17 @@ showToastMessage(String message) {
       fontSize: 16.0);
 }
 
+showSuccessToastMessage(String message) {
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 2,
+      backgroundColor: colorGreen,
+      textColor: Colors.white,
+      fontSize: 16.0);
+}
+
 showLoadingDialog(BuildContext context) {
   showDialog(
     barrierDismissible: false,
