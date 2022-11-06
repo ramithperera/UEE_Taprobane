@@ -2,8 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uee_taprobane/controller/item_route.dart';
+import 'package:uee_taprobane/models/ItemModel.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
+import 'package:uee_taprobane/utils/widget_functions.dart';
 
 class ForignUserHome extends StatefulWidget {  
   @override  
@@ -13,27 +17,26 @@ class ForignUserHome extends StatefulWidget {
 class _ForignUserHomeState extends State<ForignUserHome> {  
 
 
-   void goto(String page) {
-    // if(page == "requsition")
-    // {
-    //    Navigator.push(
-    //             context, MaterialPageRoute(builder: (context) => RequsitionHome()));     
-    // }
-    // if(page == "orders")
-    // {
-    //    Navigator.push(
-    //             context, MaterialPageRoute(builder: (context) => SiteOrderView()));     
-    // }
-    // if(page == "invoices")
-    // {
-    //    Navigator.push(
-    //             context, MaterialPageRoute(builder: (context) => ViewInvoiceHome()));     
-    // }
-    // if(page == "payments")
-    // {
-    //    Navigator.push(
-    //             context, MaterialPageRoute(builder: (context) => ViewPaymentHome()));     
-    // }
+  List<ItemModel> items = [];
+
+  Future<dynamic> getAllItems()async {
+    dynamic data = await getAllItemsToForeignCustomer(context);
+    print("Item screen print");
+    print(data["Items"]);
+    for(var i = 0; i < data["Items"].length;i++ )
+    {
+      ItemModel order = ItemModel.fromJson(data["Items"][i]);
+      setState(() {
+        items.add(order);
+      });
+
+    }
+  }
+
+  @override
+  void initState() {
+    getAllItems();
+    super.initState();
   }
 
   void logoutfunc() async {
@@ -69,114 +72,195 @@ class _ForignUserHomeState extends State<ForignUserHome> {
           ),
           body: Column(  
           children : [
-              const SizedBox(height: 10,),
-              Container(
-                width: size.width,
-                height: size.height * 0.3,
-                child: Center(
-                  child: Image.asset(
-                    imagePath + 'craftsman.png',
-                    width: 250,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+              crossAxisAlignment: CrossAxisAlignment.center ,
+              children: [
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child:Container(
+                      width: size.width *0.2,
+                      child: Image.asset(                    
+                        "${imagePath}craftsman.png"
+                        ),
+                      ),
+                    ),
+                  const  Padding(
+                    padding: EdgeInsets.only(right:10),
+                    child: Text(
+                      'Taprobane',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: colorGreen
+                      ),
+                    ),
+                  ),            
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+              crossAxisAlignment: CrossAxisAlignment.center ,
+              children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      width: size.width *0.2,
+                      child:const  Icon(
+                            Icons.storage_sharp,
+                            size : 40 ,
+                          ),
+                      ),
+                    ),
+                   Padding(
+                    padding: EdgeInsets.only(right:10),
+                    child: Container(
+                      width: size.width * 0.70,
+                      height: size.height * 0.055,
+                      child: TextFormField(                        
+                        decoration:const InputDecoration(
+                        hintText: "Search",
+                        suffixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(1)),
+                        ),
+                      ), 
+                      ),
+                    ),
+                  ), 
+              ],
+            ),
+            const SizedBox(height: 20,),
+            Row(
+              children: [
+                Container(
+                  width: size.width,
+                  child: Image.asset(                    
+                    "${imagePath}wood.png"
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 20,),
+            Row(
+              children: [
+                Container(
+                  color: colorGreen,
+                  width: size.width,
+                  height: 40,
+                  child:const Padding(
+                      padding:  EdgeInsets.all(5),
+                      child: Text(
+                        "NEW ARRIVALES",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          ),
+                        ),
+                    ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20,),
+              Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return Card(     
+                        margin : const EdgeInsets.all(10.0),    
+                        child: Container(                          
+                          child: Column(
+                            children: [
+                              Container(
+                                width: size.width * 0.3,
+                                child: Image.asset(                    
+                                  "${imagePath}craftsman.png"
+                                  ),
+                                ),
+                              const SizedBox(height: 10,),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child:  Text(
+                                    items[index].name.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10,),
+                               Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child:  Text(
+                                    items[index].unit_price.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10,),
+                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+                                  crossAxisAlignment: CrossAxisAlignment.center ,
+                                  children: [
+                                      Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: TextButton(
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all<Color>(colorGreen),
+                                            ),
+                                            onPressed: ()=>{
+                                              Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) => ViewSelectedItem(itemModel: items[index], mapKey: UniqueKey(),),)),                                            
+                                            }, 
+                                            child: const Text(
+                                              "Add to cart",
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white
+                                              ),
+                                            ),
+                                        ),
+                                      ),
+                                       Padding(
+                                        padding: const EdgeInsets.only(right:20),
+                                        child: TextButton(
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                            ),
+                                            onPressed: ()=>{
+                                              showSuccessToastMessage("Added to Wish List..!")
+                                            }, 
+                                            child: Container(
+                                              height:30,
+                                              width: 30,
+                                              child:Image.asset("${imagePath}heart.gif"),
+                                            ),
+                                        ),
+                                      ),            
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                   ),
                 ),
-            ),
-            const SizedBox(height: 50,),
-          //   Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //     children: [
-          //       TextButton(
-          //         style: ButtonStyle(
-          //           backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 140, 255)),
-          //         ),
-          //         onPressed:()=>goto("requsition"),
-          //         child: const Padding(
-          //               padding:  EdgeInsets.only(left: 20,right: 20 , top: 10 , bottom: 10),
-          //               child :Text(                                
-          //                       'Requsitions',
-          //                       style: TextStyle(
-          //                         color: Colors.white,
-          //                         fontSize: 20, 
-          //                         //fontStyle: FontStyle.italic,
-          //                         fontFamily: "calibr"
-          //                         ),
-          //                     ),
-          //         ),
-          //       ) ,
-          //     ],
-          // ),
-          // const SizedBox(height: 30,),
-          // Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //     children: [
-          //       TextButton(                                    
-          //         style: ButtonStyle(
-          //           backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 0, 140, 255)),                    
-          //         ),
-          //         onPressed:()=>goto("orders"),
-          //         child:const Padding(
-          //               padding: EdgeInsets.only(left: 40,right: 40 , top: 10 , bottom: 10),
-          //               child :Text(
-          //                       'Orders',
-          //                       style: TextStyle(
-          //                         color: Colors.white,
-          //                         fontSize: 20, 
-          //                         //fontStyle: FontStyle.italic,
-          //                         fontFamily: "calibr"
-          //                         ),
-          //                     ),
-          //         ),
-          //       ) 
-          //     ],
-          // ),
-          // const SizedBox(height: 30,),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: [
-          //     TextButton(
-          //       style: ButtonStyle(
-          //         backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 0, 140, 255)),
-          //       ),
-          //       onPressed:()=>goto("invoices"),
-          //       child:const Padding(
-          //               padding:  EdgeInsets.only(left: 35,right: 35 , top: 10 , bottom: 10),
-          //               child :Text(
-          //                       'Invoices',
-
-          //                       style: TextStyle(
-          //                         color: Colors.white,
-          //                         fontSize: 20, 
-          //                         //fontStyle: FontStyle.italic,
-          //                         fontFamily: "calibr"
-          //                         ),
-          //                     ),
-          //         ),        
-          //     ) , 
-          //   ],
-          // ),
-          // const SizedBox(height: 30,),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: [
-          //     TextButton(                
-          //       style: ButtonStyle(
-          //         backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 0, 140, 255)),
-          //       ),
-          //       onPressed:()=>goto("payments"),
-          //       child:const Padding(
-          //               padding: EdgeInsets.only(left: 27,right: 27 , top: 10 , bottom: 10),
-          //               child :Text(
-          //                       'Payments',
-          //                       style: TextStyle(
-          //                         color: Colors.white,
-          //                         fontSize: 20, 
-          //                         //fontStyle: FontStyle.italic,
-          //                         fontFamily: "calibr"
-          //                         ),
-          //                     ),
-          //         ),        
-          //     ) 
-          //   ],
-          // ),  
           ] 
         ),  
       );

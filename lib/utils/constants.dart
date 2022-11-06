@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const colorGreen = Color(0xff2ab934);
+const colorGreen = Color(0xff5DB075);
 const colorGreen2 = Color(0xff80b918);
 const colorGreen3 = Color(0xff52b788);
 const colorBlue = Color(0xff0077b6);
