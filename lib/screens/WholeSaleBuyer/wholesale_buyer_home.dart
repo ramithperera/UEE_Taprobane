@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/item_route.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/single_product_wholesale_view.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
@@ -223,7 +224,7 @@ class _WholeSaleBuyerHomeState extends State<WholeSaleBuyerHome> {
                                             ),
                                             onPressed: ()=>{
                                               Navigator.push(context,
-                                              MaterialPageRoute(builder: (context) => ViewSelectedItem(itemModel: items[index], mapKey: UniqueKey(),),)),                                            
+                                              MaterialPageRoute(builder: (context) => ViewSelectedWholeSaleItem(itemModel: items[index], mapKey: UniqueKey(),),)),                                            
                                             }, 
                                             child: const Text(
                                               "Add to cart",

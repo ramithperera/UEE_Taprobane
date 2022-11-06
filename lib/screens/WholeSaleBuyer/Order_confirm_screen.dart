@@ -507,7 +507,7 @@ class _OrderConfirmScreenState extends State<OrderConfirmScreen> {
                                 onPressed: ()=>{
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => OrderCompleteScreen( totalPrice: subTotal as int, deliveryService: deliveryService as String , paymentMethod :card.ctype.toString() ,  mapKey: UniqueKey(), )),
+                                    MaterialPageRoute(builder: (context) => OrderCompleteScreen(quantity: quantity as int, item:item,  totalPrice: subTotal as int, deliveryService: deliveryService as String , paymentMethod :card.ctype.toString() ,  mapKey: UniqueKey(), )),
                                   )                                
                                 }, 
                                 child: const Text(
