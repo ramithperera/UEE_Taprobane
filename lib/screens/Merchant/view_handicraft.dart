@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
 import 'package:uee_taprobane/custom/custom_confirm_dialog.dart';
 import 'package:uee_taprobane/main.dart';
+import 'package:uee_taprobane/screens/Merchant/edit_handycraft.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -189,7 +190,12 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditHandicraft()));
+                },
                 icon: Icon(Icons.edit_note_rounded,
                     size: 30, color: Colors.black),
                 label: Text('Edit'),
