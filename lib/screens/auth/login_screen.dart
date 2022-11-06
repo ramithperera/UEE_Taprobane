@@ -229,5 +229,5 @@ class _LoginScreenState extends State<LoginScreen> {
         showToastMessage('Login failed.Try again!');
       }
     }
-  }
+}
 }

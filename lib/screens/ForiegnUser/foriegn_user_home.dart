@@ -7,6 +7,7 @@ import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
+import 'package:uee_taprobane/utils/widget_functions.dart';
 
 class ForignUserHome extends StatefulWidget {  
   @override  
@@ -238,16 +239,15 @@ class _ForignUserHomeState extends State<ForignUserHome> {
                                         padding: const EdgeInsets.only(right:20),
                                         child: TextButton(
                                             style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all<Color>(colorGreen),
+                                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                                             ),
-                                            onPressed: null, 
-                                            child: const Text(
-                                              "Add to WishList",
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white
-                                              ),
+                                            onPressed: ()=>{
+                                              showSuccessToastMessage("Added to Wish List..!")
+                                            }, 
+                                            child: Container(
+                                              height:30,
+                                              width: 30,
+                                              child:Image.asset("${imagePath}heart.gif"),
                                             ),
                                         ),
                                       ),            

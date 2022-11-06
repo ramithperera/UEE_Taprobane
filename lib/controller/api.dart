@@ -10,5 +10,7 @@ class Api {
   static const String uploadProductImageApi = "/taprobane/product";
 
   static const String getAllItems = "/item/getAllItems";
+  static const String getCardDetailsByID = "/card/getCardById/";
+  static const String getDeliveryAddressByID = "/delivery-address/getDeliveryAddressById/";
 
 }
