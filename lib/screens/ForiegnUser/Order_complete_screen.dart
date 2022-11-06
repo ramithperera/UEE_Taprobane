@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/card_route.dart';
 import 'package:uee_taprobane/controller/deliveryAddress_route.dart';
 import 'package:uee_taprobane/controller/item_route.dart';
+import 'package:uee_taprobane/controller/normal_order_route.dart';
 import 'package:uee_taprobane/custom/custom_success_screeen.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/models/cardModel.dart';
@@ -19,13 +20,17 @@ import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
 class OrderCompleteScreen extends StatefulWidget {  
+  final int quantity;
+  final ItemModel item;
   final int totalPrice;
   final String deliveryService;
   final String paymentMethod;
   final Key mapKey;
 
     const OrderCompleteScreen(
-      {required this.totalPrice,
+      {required this.quantity,
+      required this.item,
+      required this.totalPrice,
       required this.paymentMethod,
       required this.deliveryService,
       required this.mapKey})
@@ -43,15 +48,17 @@ class _OrderCompleteScreenState extends State<OrderCompleteScreen> {
   String? selecteddeliveryService;
   String? selectedpaymentMethod;
   int? totalPrice;
-
-
+  ItemModel buyingitem = ItemModel();
+  int quantity = 0;
 
   @override
   void initState() {
     super.initState();
+    buyingitem = widget.item;
     selecteddeliveryService = widget.deliveryService;
     selectedpaymentMethod = widget.paymentMethod;
     totalPrice = widget.totalPrice;
+    quantity = widget.quantity;
   }
 
   void logoutfunc() async {
@@ -247,10 +254,8 @@ class _OrderCompleteScreenState extends State<OrderCompleteScreen> {
                               const SizedBox(width: 10),
                               TextButton(                              
                                 onPressed: ()=>{
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => ForignUserHome()),
-                                  )                                
+                                  makeNewOrder(selectedpaymentMethod,totalPrice,selecteddeliveryService,buyingitem,quantity)
+                               
                                 }, 
                                 child: const Text(
                                   "Order Complete...! Back To Home",
@@ -273,5 +278,39 @@ class _OrderCompleteScreenState extends State<OrderCompleteScreen> {
       ),  
       );
   }  
+
+ void makeNewOrder(selectedpaymentMethod,totalPrice,selecteddeliveryService,buyingitem, quantity) async {
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var array = [{
+        "itemName":buyingitem.name,
+        "itemPrice":buyingitem.unit_price,
+        "itemQuantity":quantity,
+      }];
+
+      Map<String, String> body = {
+        'payment_method': selectedpaymentMethod.toString(),
+        'delivery_method': selecteddeliveryService.toString(),
+        'products': array.toString(),
+        "final_price":totalPrice.toString(),
+        'foriegn_user_Id':prefs.getString("_id").toString(),
+      };
+
+      print(body.toString());
+
+      String? response = await createNewNormalOrder(context, body);
+      if (response != null) {
+        showToastMessage('Add New Order Success!');      
+        Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ForignUserHome()));
+      }
+      else
+      {
+        showToastMessage('Register failed.Try again!');
+      }
+  }
+
 }  
+
+
 

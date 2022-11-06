@@ -12,22 +12,22 @@ import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
-class NormalCartScreen extends StatefulWidget {  
+class WholeSaleCartScreen extends StatefulWidget {  
   final ItemModel itemModel;
   final int quantity;
   final Key mapKey;
 
-    const NormalCartScreen(
+    const WholeSaleCartScreen(
       {required this.itemModel,
       required this.quantity,
       required this.mapKey})
       : super(key: mapKey);
       
   @override  
-  _NormalCartScreenState createState() => _NormalCartScreenState();  
+  _WholeSaleCartScreenState createState() => _WholeSaleCartScreenState();  
 }  
   
-class _NormalCartScreenState extends State<NormalCartScreen> {  
+class _WholeSaleCartScreenState extends State<WholeSaleCartScreen> {  
 
 
   ItemModel item = ItemModel();

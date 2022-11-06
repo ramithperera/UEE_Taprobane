@@ -13,4 +13,13 @@ class Api {
   static const String getCardDetailsByID = "/card/getCardById/";
   static const String getDeliveryAddressByID = "/delivery-address/getDeliveryAddressById/";
 
+
+  static const String createNewCard = "/card/createCard";
+  static const String updateCard = "/card/updateCard/";
+
+  static const String createNewDeliveryDetails = "/delivery-address/createDeliveryAddress";
+  static const String updateDeliveryDetails = "/delivery-address/updateDeliveryAddress/";
+
+
+  static const String createNormalOrder = "/normal-order/createNormalOrder";
 }
