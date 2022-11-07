@@ -10,6 +10,7 @@ import 'package:uee_taprobane/custom/custom_success_screeen.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/models/cardModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/Delivery_service_select_screen.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/Payment_details_update_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
@@ -383,10 +384,10 @@ class _PaymentConfirmScreenState extends State<PaymentConfirmScreen> {
                                           children: [
                                             TextButton(                              
                                               onPressed: ()=>{
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(builder: (context) => CustomSuccessScreen( role: userName, status: "payment", )),
-                                                // )                                
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => PaymentDetailsUpdate()),
+                                                )                                
                                               }, 
                                               child: const Text(
                                                 "Edit Payment Details",
