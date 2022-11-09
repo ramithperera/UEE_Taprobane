@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
 import 'package:uee_taprobane/custom/custom_confirm_dialog.dart';
 import 'package:uee_taprobane/main.dart';
+import 'package:uee_taprobane/screens/DeliveryPerson/single_order_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -190,10 +191,10 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => EditHandicraft()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SingleOrderScreen()));
                 },
                 icon: Icon(Icons.library_books_rounded,
                     size: 30, color: Colors.black),
