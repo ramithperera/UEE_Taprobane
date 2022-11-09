@@ -7,6 +7,7 @@ import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
 import 'package:uee_taprobane/screens/WholeSaleBuyer/single_product_wholesale_view.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
+import 'package:uee_taprobane/screens/profile/profile_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -62,13 +63,26 @@ class _WholeSaleBuyerHomeState extends State<WholeSaleBuyerHome> {
             actions: <Widget>[
               IconButton(
                 icon: const Icon(
+                  Icons.attribution,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen()));
+                },
+              ),
+              IconButton(
+                icon: const Icon(
                   Icons.logout,
                   color: Colors.white,
                 ),
                 onPressed: () {
                   logoutfunc();
                 },
-              )
+              ),
+
             ],
           ),
           body: Column(  

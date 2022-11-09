@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uee_taprobane/controller/card_route.dart';
+import 'package:uee_taprobane/controller/deliveryAddress_route.dart';
+import 'package:uee_taprobane/models/cardModel.dart';
+import 'package:uee_taprobane/models/deliveryAddressModel.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/Delivery_details_insert_screen.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/Delivery_details_update_screen.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/Payment%20Details_insert_screen.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/Payment_details_update_screen.dart';
+import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/screens/profile/edit_profile.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
@@ -12,6 +22,111 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  CardModel card = CardModel();
+  DeliveryAddressModel deliveryAddressModel = DeliveryAddressModel();
+
+  bool cardHave = false;
+  bool addressHave = false;
+
+  void logoutfunc() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("_id");
+    prefs.remove("user");
+    prefs.remove("token");
+    prefs.remove("userRole");
+    Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => LoginScreen(),));
+
+  }
+
+  void getloggedUserPaymentDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString("_id");
+    print(prefs.getString("_id"));
+    var res =  await getCardDetailsOfLoggedCustomer(context,prefs.getString("_id"));
+    print(res["card"].toString());
+    setState(() {
+      card = CardModel.fromJson(res["card"]);
+      if(card.cardNum!.isNotEmpty)
+      {
+        cardHave = true;
+      }
+      else
+      {
+        cardHave = false;
+      }
+    });
+
+  }
+
+
+  void getloggedUserDeliveryAddressDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString("_id");
+    print(prefs.getString("_id"));
+    var res =  await getDeliveryAddressDetailsOfLoggedCustomer(context,prefs.getString("_id"));
+    print(res["DeliveryAddress"].toString());
+    setState(() {
+      deliveryAddressModel = DeliveryAddressModel.fromJson(res["DeliveryAddress"]);
+      if(deliveryAddressModel.addressLine1!.isNotEmpty)
+      {
+        addressHave = true;
+      }
+      else
+      {
+        addressHave = false;
+      }
+    });
+
+  }
+  
+  void cardDetailsEditNavigation(){
+      if(cardHave == false)
+      {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PaymentDetailsInsert()),
+        );
+      }
+      else
+      {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PaymentDetailsUpdate()),
+        );
+        
+      }
+  }
+
+    void deliveryDetailsEditNavigation(){
+      if(addressHave == false)
+      {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DeliveryDetailsInsert()),
+        );
+      }
+      else
+      {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DeliveryDetailsUpdate()),
+        );
+        
+      }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getloggedUserPaymentDetails();
+    getloggedUserDeliveryAddressDetails();
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -23,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         // automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_rounded,
             size: 30,
           ),
@@ -31,17 +146,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Navigator.pop(context);
           },
         ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: const Icon(
-        //       Icons.logout,
-        //       color: Colors.white,
-        //     ),
-        //     onPressed: () {
-        //       logoutfunc();
-        //     },
-        //   )
-        // ],
+        actions: <Widget>[
+           IconButton(
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              logoutfunc();
+            },
+          ),
+          IconButton(
+            onPressed: (){
+              openPaymentAndDeliveyPopUp(context);
+            }, 
+            icon: const Icon(Icons.more_vert),
+            ), 
+          const SizedBox(width: 20),       
+        ],
       ),
       body: SafeArea(
         child: Container(
@@ -198,4 +320,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  openPaymentAndDeliveyPopUp(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('My Payment & Delivery'),
+          content: SingleChildScrollView(
+              child: Column(                
+                children: [
+                    const SizedBox(height: 20),
+
+                    ElevatedButton(
+                        onPressed: () {
+                          cardDetailsEditNavigation();
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 50, vertical: 20)),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(width: 3, color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        child: Text('Payment Details'),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        deliveryDetailsEditNavigation();
+                      },   
+                                       
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 50, vertical: 20)),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            side: BorderSide(width: 3, color: Colors.black),
+                          ),                       
+                        ),
+                      ),
+                      child: Text('Delivery Details'),
+                    )
+                ],
+              ),
+            ),     
+          actions: <Widget>[
+            TextButton(
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onPressed: () {            
+                        Navigator.of(context).pop();
+                      },
+                    ), 
+          ],
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        );
+      },
+    );
+  }
+
+
 }

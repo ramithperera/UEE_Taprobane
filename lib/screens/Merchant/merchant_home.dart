@@ -62,17 +62,30 @@ class _MerchantHomeState extends State<MerchantHome> {
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
         ),
         automaticallyImplyLeading: false,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.logout,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              logoutfunc();
-            },
-          )
-        ],
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.attribution,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfileScreen()));
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  logoutfunc();
+                },
+              ),
+
+            ],
       ),
       body: Column(children: [
         const SizedBox(
