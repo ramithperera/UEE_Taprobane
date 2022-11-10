@@ -7,6 +7,7 @@ class Api {
 
   static const String loginApi = "/taprobane/signin";
   static const String registerApi = "/taprobane/signup";
+  static const String userRemoveApi = "/taprobane/delete-user/";
   static const String uploadProductImageApi = "/taprobane/product";
 
   static const String getAllItems = "/item/getAllItems";
