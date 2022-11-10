@@ -182,64 +182,52 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void login() async {
-    if (!validateEmail(emailController.text)) {
-      showToastMessage('Enter valid email!');
-    }
-    if (passwordController.text.isEmpty) {
-      showToastMessage('Password cannot be empty!');
-    } 
-    else
-    {
-      Map<String, String> body = {
-        "email": emailController.text,
-        "password": passwordController.text
-      };
-     if (!validateEmail(emailController.text)) {
-       showToastMessage('Enter valid email!');
-     }
-     if (passwordController.text.isEmpty) {
-       showToastMessage('Password cannot be empty!');
-     }
-     else
-     {
-       Map<String, String> body = {
-         "email": emailController.text,
-         "password": passwordController.text
-       };
-       String? response = await userLogin(context, body);
-        print("response print");
-        print(response);
-       if (response != null) {
-         var loggedUser = LoggedUser.fromJson(jsonDecode(response));
-         showToastMessage('Login Success!');
-         saveLoggedUser(loggedUser.data);
-         if(loggedUser.data!.userRole == "foreign_user")
-         {
-         Navigator.push(
-                 context, MaterialPageRoute(builder: (context) => ForignUserHome()));
-         }
-        if(loggedUser.data!.userRole == "wholesale_buyer")
-         {
-         Navigator.push(
-                 context, MaterialPageRoute(builder: (context) => WholeSaleBuyerHome()));
-         }
-         if(loggedUser.data!.userRole == "merchant")
+    void login() async {
+        if (!validateEmail(emailController.text)) {
+          showToastMessage('Enter valid email!');
+        }
+        if (passwordController.text.isEmpty) {
+          showToastMessage('Password cannot be empty!');
+        } 
+        else
         {
-         Navigator.push(
-                 context, MaterialPageRoute(builder: (context) => MerchantHome()));
-         }
-         if(loggedUser.data!.userRole == "delivery_person")
-         {
-         Navigator.push(
-                 context, MaterialPageRoute(builder: (context) => DeliveryPersonHome()));
-         }
-       }
-       else
-       {
-        showToastMessage('Login failed.Try again!');
-       }
-     }
+          Map<String, String> body = {
+            "email": emailController.text,
+            "password": passwordController.text
+          };
 
-}
-
+          String? response = await userLogin(context, body);
+          // print("response print");
+          // print(response);
+          if (response != null) {
+            var loggedUser = LoggedUser.fromJson(jsonDecode(response));
+            showToastMessage('Login Success!');
+            saveLoggedUser(loggedUser.data);
+            if(loggedUser.data!.userRole == "foreign_user")
+            {
+            Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => ForignUserHome()));
+            }
+            if(loggedUser.data!.userRole == "wholesale_buyer")
+            {
+            Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => WholeSaleBuyerHome()));
+            }
+            if(loggedUser.data!.userRole == "merchant")
+            {
+            Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => MerchantHome()));
+            }
+            if(loggedUser.data!.userRole == "delivery_person")
+            {
+            Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => DeliveryPersonHome()));
+            }
+          }
+          else
+          {
+            showToastMessage('Login failed.Try again!');
+          }
+        }
+    }
+  }
