@@ -188,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     if (passwordController.text.isEmpty) {
       showToastMessage('Password cannot be empty!');
-    }
+    } 
     else
     {
       Map<String, String> body = {
