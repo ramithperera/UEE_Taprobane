@@ -4,25 +4,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
 import 'package:uee_taprobane/custom/custom_confirm_dialog.dart';
 import 'package:uee_taprobane/main.dart';
-import 'package:uee_taprobane/screens/Merchant/edit_handycraft.dart';
+import 'package:uee_taprobane/screens/DeliveryPerson/single_order_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
-class ViewHandicraft extends StatefulWidget {
-  ViewHandicraft({Key? key}) : super(key: key);
+class UpcommingOrders extends StatefulWidget {
+  UpcommingOrders({Key? key}) : super(key: key);
 
   @override
-  State<ViewHandicraft> createState() => _ViewHandicraftState();
+  State<UpcommingOrders> createState() => _UpcommingOrdersState();
 }
 
-class _ViewHandicraftState extends State<ViewHandicraft> {
+class _UpcommingOrdersState extends State<UpcommingOrders> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Your Handicrafts',
+          'Upcomming Orders',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
         ),
         // automaticallyImplyLeading: false,
@@ -194,25 +194,25 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditHandicraft()));
+                          builder: (context) => SingleOrderScreen()));
                 },
-                icon: Icon(Icons.edit_note_rounded,
+                icon: Icon(Icons.library_books_rounded,
                     size: 30, color: Colors.black),
-                label: Text('Edit'),
+                label: Text('View Order'),
                 style: ElevatedButton.styleFrom(
-                    minimumSize: Size(size.width * 0.3, 40)),
+                    minimumSize: Size(size.width * 0.6, 40)),
               ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  confirmDialog();
-                },
-                icon: Icon(Icons.delete_outline_rounded,
-                    size: 30, color: Colors.black),
-                label: Text('Remove'),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: colorRed,
-                    minimumSize: Size(size.width * 0.3, 40)),
-              ),
+              // ElevatedButton.icon(
+              //   onPressed: () {
+              //     confirmDialog();
+              //   },
+              //   icon: Icon(Icons.delete_outline_rounded,
+              //       size: 30, color: Colors.black),
+              //   label: Text('Remove'),
+              //   style: ElevatedButton.styleFrom(
+              //       backgroundColor: colorRed,
+              //       minimumSize: Size(size.width * 0.3, 40)),
+              // ),
             ],
           ),
         ],
