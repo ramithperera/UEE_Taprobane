@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:uee_taprobane/controller/ItemPackage_route.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
+import 'package:uee_taprobane/models/ItemPackageModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/normal_cart_screen.dart';
 import 'package:uee_taprobane/screens/WholeSaleBuyer/wholeSale_cart_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
+import 'package:uee_taprobane/utils/widget_functions.dart';
 
 class ViewSelectedWholeSaleItem extends StatefulWidget {
   final ItemModel itemModel;
@@ -20,7 +23,35 @@ class ViewSelectedWholeSaleItem extends StatefulWidget {
 class ViewSelectedWholeSaleItemState extends State<ViewSelectedWholeSaleItem> {
   
   ItemModel itemModel = ItemModel();
+  ItemPackageModel selecteditemPackageModel = ItemPackageModel();
   int item_quantity = 1;
+  int total_price = 0;
+
+  List<ItemPackageModel> itemPackages = [];
+
+  Future<dynamic> getAllItemPackagesDetails()async {
+    dynamic data = await getAllItemPackageDetails(context,widget.itemModel.id);
+    print("Item Packages screen print");
+    print(data["ItemPackage"]);
+    for(var i = 0; i < data["ItemPackage"].length;i++ )
+    {
+      ItemPackageModel itemPackage = ItemPackageModel.fromJson(data["ItemPackage"][i]);
+      setState(() {
+        itemPackages.add(itemPackage);
+      });
+
+    }
+  }
+
+  void caltotalValues(String price , ItemPackageModel itemPackageModel){
+    setState(() {
+    String onlyPrice = price.substring(1);
+    int fprice = int.parse(onlyPrice);
+    total_price  = fprice * item_quantity;
+    print(total_price);
+    selecteditemPackageModel = itemPackageModel;
+    });
+  }
 
   @override
   void initState() {
@@ -28,6 +59,7 @@ class ViewSelectedWholeSaleItemState extends State<ViewSelectedWholeSaleItem> {
     itemModel = widget.itemModel;
     print("selected Data");
     print(itemModel.toJson().toString());
+    getAllItemPackagesDetails();
     super.initState();
   }
 
@@ -61,12 +93,10 @@ class ViewSelectedWholeSaleItemState extends State<ViewSelectedWholeSaleItem> {
             backgroundColor: Colors.transparent,
           ),
         ],
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(10),
+        body: Container(
+            padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                const SizedBox(height: 10),
                 Row(
                   children: [
                     Container(
@@ -119,197 +149,132 @@ class ViewSelectedWholeSaleItemState extends State<ViewSelectedWholeSaleItem> {
                     color: Colors.grey,
                     thickness: 0.5,
                   ),
-                ),                
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Container(
-                      width: size.width * 0.9,
-                      height: 40,
-                      child:Row(
-                        children: [
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(left:10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset("${imagePath}location.gif"),
-                            ), 
-                          ),                          
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(left:10),
-                            child:Align(
-                            alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Location",
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontFamily: 'AirbnbCereal',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),                          
-                          ),                          
-                          const SizedBox(height: 10),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 10,
-                  child: const Divider(
-                    color: Colors.grey,
-                    thickness: 0.5,
-                  ),
-                ),                
-                const SizedBox(height: 20),
-                  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly ,
-                  //crossAxisAlignment: CrossAxisAlignment.center ,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          //width: size.width * 0.9,
-                          height: 40,
-                          child:Row(
+                ),                             
+                //packages display
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    child: ListView.builder(
+                    itemCount: itemPackages.length,
+                    itemBuilder: (context, index) {
+                      return Card(     
+                        margin : const EdgeInsets.all(5),    
+                        child: Container(                          
+                          child: Column(
                             children: [
-                              const SizedBox(height: 10),
-                              Padding(
-                                padding: const EdgeInsets.only(left:10),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Image.asset("${imagePath}cart.gif"),
-                                ), 
-                              ),                          
-                              const SizedBox(height: 10),
-                              const Padding(
-                                padding: EdgeInsets.only(left:10),
-                                child:Align(
+                              Align(
                                 alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Quantity",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontFamily: 'AirbnbCereal',
-                                        fontWeight: FontWeight.bold),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child:  Text(
+                                    itemPackages[index].name.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black
+                                    ),
                                   ),
-                                ),                          
-                              ),                          
-                              const SizedBox(height: 10),
+                                ),
+                              ),
+                              const SizedBox(height: 10,),
+                               Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child:  Text(
+                                    itemPackages[index].no_units.toString() + " units",
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10,),
+                               Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child:  Text(
+                                    itemPackages[index].package_price.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10,),
+                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly ,
+                                  crossAxisAlignment: CrossAxisAlignment.center ,
+                                  children: [
+                                       Column(
+                                          children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 10),
+                                                child: TextButton(
+                                                      onPressed:()=>{
+                                                          setState((() {
+                                                            item_quantity = item_quantity + 1;
+                                                            caltotalValues( itemPackages[index].package_price.toString() , itemPackages[index]);                                    
+                                                          }))
+                                                      } , 
+                                                      child:Icon(Icons.add) 
+                                                  ),
+                                              ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            Padding(
+                                                padding: EdgeInsets.only(right:0),
+                                                child:Align(
+                                                alignment: Alignment.centerLeft,
+                                                  child: Text(
+                                                    item_quantity.toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15,
+                                                        fontFamily: 'AirbnbCereal',
+                                                        fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(bottom: 10),
+                                                child: TextButton(
+                                                      onPressed:()=>{
+                                                          setState((() {
+                                                            item_quantity = item_quantity - 1;
+                                                            caltotalValues(itemPackages[index].package_price.toString() , itemPackages[index]);                                     
+                                                          }))
+                                                      } , 
+                                                      child:Icon(Icons.minimize_outlined) 
+                                                  ),                            
+                                              ),
+                                          ],
+                                        ),            
+                                  ],
+                                ),
                             ],
                           ),
-                        ), 
-                      ],
-                    ),
-                    Column(
-                      children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 90),
-                            child: TextButton(
-                                  onPressed:()=>{
-                                      setState((() {
-                                        item_quantity = item_quantity + 1;                                    
-                                      }))
-                                  } , 
-                                  child:Icon(Icons.add) 
-                              ),                            
-                          ),
-                      ],
-                    ),                      
-                    Column(
-                      children: [
-                         Padding(
-                            padding: EdgeInsets.only(right:0),
-                            child:Align(
-                            alignment: Alignment.centerLeft,
-                              child: Text(
-                                item_quantity.toString(),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontFamily: 'AirbnbCereal',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: TextButton(
-                                  onPressed:()=>{
-                                      setState((() {
-                                        item_quantity = item_quantity - 1;                                    
-                                      }))
-                                  } , 
-                                  child:Icon(Icons.minimize_outlined) 
-                              ),                            
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 10,
-                  child: const Divider(
-                    color: Colors.grey,
-                    thickness: 0.5,
+                        ),
+                      );
+                    },
                   ),
-                ),                
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Description",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontFamily: 'AirbnbCereal',
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ]
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding:const EdgeInsets.all(30),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      itemModel.description.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontFamily: 'AirbnbCereal',
-                      ),
-                    ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 10,
-                  child: const Divider(
-                    color: Colors.black,
-                    thickness: 0.5,
-                  ),
-                ),
+
               ],
             ),
           ),
-        ),
       ),
       bottomNavigationBar: Visibility(
         visible: true,
@@ -347,7 +312,7 @@ class ViewSelectedWholeSaleItemState extends State<ViewSelectedWholeSaleItem> {
                                 onPressed: ()=>{
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => WholeSaleCartScreen( itemModel: itemModel, quantity: item_quantity ,  mapKey: UniqueKey(), )),
+                                    MaterialPageRoute(builder: (context) => WholeSaleCartScreen( itemModel: selecteditemPackageModel, quantity: item_quantity , total_price: total_price ,  mapKey: UniqueKey(), )),
                                   )                                
                                 }, 
                                 child: const Text(
