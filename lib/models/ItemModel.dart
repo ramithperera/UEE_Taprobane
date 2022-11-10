@@ -1,6 +1,7 @@
 import 'package:uee_taprobane/models/MerchantModel.dart';
 
 class ItemModel {
+  String? id;
   String? item_id;
   String? name;
   String? description;
@@ -10,6 +11,7 @@ class ItemModel {
   MerchantModel? owner;
 
   ItemModel({
+    this.id,
     this.item_id,
     this.name,
     this.description,
@@ -20,6 +22,7 @@ class ItemModel {
   });
 
   ItemModel.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
     item_id = json['item_id'];
     name = json['name'];
     description = json['description'];
@@ -31,6 +34,7 @@ class ItemModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> itemModel = new Map<String, dynamic>();
+    itemModel['_id'] = this.id;
     itemModel['item_id'] = this.item_id;
     itemModel['name'] = this.name;
     itemModel['description'] = this.description;

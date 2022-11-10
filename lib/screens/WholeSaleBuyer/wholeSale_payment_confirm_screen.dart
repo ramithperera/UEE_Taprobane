@@ -1,58 +1,45 @@
-
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/card_route.dart';
-import 'package:uee_taprobane/controller/deliveryAddress_route.dart';
-import 'package:uee_taprobane/controller/item_route.dart';
-import 'package:uee_taprobane/custom/custom_success_screeen.dart';
-import 'package:uee_taprobane/models/ItemModel.dart';
+import 'package:uee_taprobane/models/ItemPackageModel.dart';
 import 'package:uee_taprobane/models/cardModel.dart';
-import 'package:uee_taprobane/models/deliveryAddressModel.dart';
-import 'package:uee_taprobane/screens/ForiegnUser/Order_confirm_screen.dart';
-import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/WholeSale_Delivery_service_select_screen.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
-import 'package:uee_taprobane/utils/widget_functions.dart';
 
-class DeliveryDetailsScreen extends StatefulWidget {  
-  final ItemModel itemModel;
+class WholeSalePaymentConfirmScreen extends StatefulWidget {  
+  final ItemPackageModel itemModel;
   final int quantity;
-  final String deliveryService;
   final Key mapKey;
 
-    const DeliveryDetailsScreen(
+    const WholeSalePaymentConfirmScreen(
       {required this.itemModel,
       required this.quantity,
-      required this.deliveryService,
       required this.mapKey})
       : super(key: mapKey);
       
   @override  
-  _DeliveryDetailsScreenState createState() => _DeliveryDetailsScreenState();  
+  _WholeSalePaymentConfirmScreenState createState() => _WholeSalePaymentConfirmScreenState();  
 }  
   
-class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {  
+class _WholeSalePaymentConfirmScreenState extends State<WholeSalePaymentConfirmScreen> {  
 
 
-  ItemModel item = ItemModel();
+  ItemPackageModel item = ItemPackageModel();
   int? quantity;
-  String? selecteddeliveryService;
-  String username= "";
-  DeliveryAddressModel deliveryAddressModel = DeliveryAddressModel();
+  int? total;
+  CardModel card = CardModel();
+  String userName = "";
 
-
-   void getloggedUserDeliveryAddressDetails() async {
+ void getloggedUserPaymentDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.getString("_id");
     print(prefs.getString("_id"));
-    var res =  await getDeliveryAddressDetailsOfLoggedCustomer(context,prefs.getString("_id"));
-    print(res["DeliveryAddress"].toString());
+    var res =  await getCardDetailsOfLoggedCustomer(context,prefs.getString("_id"));
+    print(res["card"].toString());
     setState(() {
-      deliveryAddressModel = DeliveryAddressModel.fromJson(res["DeliveryAddress"]);
-      username = prefs.getString("user")!;
+      card = CardModel.fromJson(res["card"]);
+      userName = prefs.getString("user")!;
     });
 
   }
@@ -61,8 +48,10 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
   void initState() {
     item = widget.itemModel;
     quantity = widget.quantity;
-    selecteddeliveryService = widget.deliveryService;
-    getloggedUserDeliveryAddressDetails();
+    String onlyPrice = item.package_price!.substring(1);
+    int price = int.parse(onlyPrice);
+    total  = price * widget.quantity;
+    getloggedUserPaymentDetails();
     super.initState();
   }
 
@@ -83,7 +72,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       final Size size = MediaQuery.of(context).size;
     return Scaffold(       
           appBar: AppBar(  
-            title: const Text('Confirm Delivery Address '),  
+            title: const Text('Confirm Payment'),  
             automaticallyImplyLeading: true,
             actions: <Widget>[
               IconButton(
@@ -105,6 +94,20 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                   width: size.width,
                   child: Column(
                     children: [
+                     const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child:  Text(
+                            "Selected Item",
+                            style: TextStyle(
+                                fontSize: 20, 
+                                fontWeight: FontWeight.bold,
+                                color:colorGreen
+                                ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 30),
                       Align(
                       alignment: Alignment.centerLeft,
@@ -114,16 +117,72 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Container(
-                                    width: size.width * 0.9,
-                                    height: 200,
-                                    decoration: const BoxDecoration(
-                                        color: colorGreen ,
-                                        border: Border(),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 200,
+                                        height: 200,
+                                        decoration: const BoxDecoration(
+                                            //backgroundBlendMode:  ,
+                                            border: Border(),
 
-                                    ),
-                                    child: Image.asset("${imagePath}dservice.png"),                                          
-                                    ),
+                                        ),
+                                        child: Image.asset("${imagePath}noimage.gif"),                                          
+                                        ),
+                                    ],                                  
+                                  ),
+                                  Column(
+                                    children : [
+                                      Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          item.name.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20, 
+                                              fontWeight: FontWeight.bold,
+                                              color:Colors.black
+                                              ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          "Price : " + item.package_price.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20, 
+                                              fontWeight: FontWeight.bold,
+                                              color:Colors.black
+                                              ),
+                                        ),
+                                      ),
+                                     
+                                      const SizedBox(height: 10),
+                                      Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          "Units  : " + item.no_units.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20, 
+                                              fontWeight: FontWeight.bold,
+                                              color:Colors.black
+                                              ),
+                                        ),
+                                      ),
+                                       const SizedBox(height: 10),
+                                      Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          "quantity : " + quantity.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20, 
+                                              fontWeight: FontWeight.bold,
+                                              color:Colors.black
+                                              ),
+                                        ),
+                                      ),
+                                    ]
+                                  ),
                                 ],
                               ),
                              
@@ -135,7 +194,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                   ),
                 ),
                 const SizedBox(height: 50),
-                Container(
+                                Container(
                   width: size.width,
                   child: Column(
                     children: [
@@ -147,11 +206,11 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                 width: size.width,
                                 height: 40,
                                 color: colorGreen,
-                                child: const Padding(
-                                  padding: EdgeInsets.all(10),
+                                child: Padding(
+                                  padding:const EdgeInsets.all(10),
                                   child: Text(
-                                  "Confirm Your Delivery Address Details",
-                                  style: TextStyle(
+                                  "Total Price : - " + "\$" +total.toString(),
+                                  style: const TextStyle(
                                       fontSize: 20, 
                                       fontWeight: FontWeight.bold,
                                       color:Colors.white
@@ -168,61 +227,11 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                           padding: EdgeInsets.only(left: 50),
                           child:  Column(
                             children: [
-                                  Row(
-                                    children: [
-                              
-                                      const Text(
-                                        "User Name : -",
-                                        style:  TextStyle(
-                                            fontSize: 18, 
-                                            fontWeight: FontWeight.bold,
-                                            color:Colors.black                                              
-                                        ),
-                                      ),
-                              
-                                      Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          username.toString(),
-                                          style: const TextStyle(
-                                              fontSize: 18, 
-                                              fontWeight: FontWeight.bold,
-                                              color:colorGreen
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                 Row(
-                                    children: [
-                              
-                                      const Text(
-                                        "Selected Delivery Service : -",
-                                        style:  TextStyle(
-                                            fontSize: 18, 
-                                            fontWeight: FontWeight.bold,
-                                            color:Colors.black                                              
-                                        ),
-                                      ),
-                              
-                                      Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          selecteddeliveryService.toString(),
-                                          style: const TextStyle(
-                                              fontSize: 18, 
-                                              fontWeight: FontWeight.bold,
-                                              color:colorGreen
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                Row(
+                              Row(
                                 children: [
                           
                                   const Text(
-                                    "Address Line One : -",
+                                    "Card Type : -",
                                     style:  TextStyle(
                                         fontSize: 18, 
                                         fontWeight: FontWeight.bold,
@@ -233,7 +242,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                       deliveryAddressModel.addressLine1.toString(),
+                                       card.ctype.toString(),
                                       style: const TextStyle(
                                           fontSize: 18, 
                                           fontWeight: FontWeight.bold,
@@ -246,7 +255,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                               Row(
                                 children: [
                                   const Text(
-                                    "Address Line 2 : -",
+                                    "Card Holder name : -",
                                     style:  TextStyle(
                                         fontSize: 18, 
                                         fontWeight: FontWeight.bold,
@@ -256,7 +265,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   Align(
                                   alignment: Alignment.centerLeft,
                                   child: Expanded(child: Text(
-                                       deliveryAddressModel.addressLine2.toString(),
+                                       card.holder.toString(),
                                       style: const TextStyle(
                                           fontSize: 18, 
                                           fontWeight: FontWeight.bold,
@@ -270,7 +279,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                 children: [
                           
                                   const Text(
-                                    "User Mobile Number : -",
+                                    "Card Number : -",
                                     style:  TextStyle(
                                         fontSize: 18, 
                                         fontWeight: FontWeight.bold,
@@ -281,7 +290,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                   Align(
                                   alignment: Alignment.centerLeft,
                                   child: Expanded(child: Text(
-                                       deliveryAddressModel.mobileno.toString(),
+                                       card.cardNum.toString(),
                                       style: const TextStyle(
                                           fontSize: 18, 
                                           fontWeight: FontWeight.bold,
@@ -290,13 +299,89 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                     ),)
                                   ),
                                 ],
-                              ),                              
+                              ),
+                              Row(
+                                children: [
+                          
+                                  const Text(
+                                    "Card Year : -",
+                                    style:  TextStyle(
+                                        fontSize: 18, 
+                                        fontWeight: FontWeight.bold,
+                                        color:Colors.black                                              
+                                    ),
+                                  ),
+                          
+                                  Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                       card.year.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 18, 
+                                          fontWeight: FontWeight.bold,
+                                          color:colorGreen
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                          
+                                  const Text(
+                                    "Card Month : -",
+                                    style:  TextStyle(
+                                        fontSize: 18, 
+                                        fontWeight: FontWeight.bold,
+                                        color:Colors.black                                              
+                                    ),
+                                  ),
+                          
+                                  Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                       card.month.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 18, 
+                                          fontWeight: FontWeight.bold,
+                                          color:colorGreen
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                children: [
+                          
+                                  const Text(
+                                    "Card CVV : -",
+                                    style:  TextStyle(
+                                        fontSize: 18, 
+                                        fontWeight: FontWeight.bold,
+                                        color:Colors.black                                              
+                                    ),
+                                  ),
+                          
+                                  Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                       card.cvv.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 18, 
+                                          fontWeight: FontWeight.bold,
+                                          color:colorGreen
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Row(
                                 children: [
                                     Padding(
                                       padding: const EdgeInsets.all(20),
                                       child:Container(
-                                        width: MediaQuery.of(context).size.width * 0.5,
+                                        width: MediaQuery.of(context).size.width * 0.7,
                                         color: colorBlue2,
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -309,7 +394,7 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                                 // )                                
                                               }, 
                                               child: const Text(
-                                                "Edit Delivery Details",
+                                                "Edit Payment Details",
                                                 style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold,
@@ -322,7 +407,8 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                       ),
                                     ),
                                 ],
-                              ),                   
+                              ),
+                             
                             ],                        
                           ),
                         ),
@@ -369,11 +455,11 @@ class _DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                                 onPressed: ()=>{
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => OrderConfirmScreen( itemModel: item, quantity: quantity as int , deliveryService : selecteddeliveryService as String , mapKey: UniqueKey(), )),
+                                    MaterialPageRoute(builder: (context) => WholeSaleDeliveryServiceSelectScreen( itemModel: item, quantity: quantity as int ,  mapKey: UniqueKey(), )),
                                   )                                
                                 }, 
                                 child: const Text(
-                                  "Confirm Delivery Details",
+                                  "Continue to delivery",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,

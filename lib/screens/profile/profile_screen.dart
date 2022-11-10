@@ -117,6 +117,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
   }
 
+  void deleteDeliveryDetails()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString("_id");
+    print(prefs.getString("_id"));
+    var res =  await deleteDeliveryAddressDetailsOfLoggedCustomer(context,prefs.getString("_id"));
+    showToastMessage('Delete Address Success!');
+    Navigator.of(context).pop();
+
+  }
+
+  void deleteCardDetails()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString("_id");
+    print(prefs.getString("_id"));
+    var res =  await deleteCardDetailsOfLoggedCustomer(context,prefs.getString("_id"));
+    showToastMessage('Delete Card Success!');
+    Navigator.of(context).pop();
+    
+  }
+
   @override
   void initState() {
     super.initState();
@@ -365,7 +385,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       child: Text('Delivery Details'),
-                    )
+                    ),
+
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      
+                        onPressed: () {
+                          deleteCardDetails();
+                        },
+                        style: ButtonStyle(   
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),                        
+                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 50, vertical: 20)),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(width: 3, color: Colors.red),
+                            ),
+                          ),
+                        ),
+                        child: Text('Delete Card'),
+                    ),
+
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      
+                        onPressed: () {
+                          deleteDeliveryDetails();
+                        },
+                        style: ButtonStyle(    
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),                      
+                          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 50, vertical: 20)),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(width: 2, color: Colors.red),
+                            ),
+                          ),
+                        ),
+                        child: Text('Delete Address'),
+                    ),
+
+                    const SizedBox(height: 20),
                 ],
               ),
             ),     
