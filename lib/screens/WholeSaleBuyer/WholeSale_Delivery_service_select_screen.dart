@@ -1,39 +1,31 @@
 
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uee_taprobane/controller/card_route.dart';
-import 'package:uee_taprobane/controller/item_route.dart';
-import 'package:uee_taprobane/custom/custom_success_screeen.dart';
-import 'package:uee_taprobane/models/ItemModel.dart';
-import 'package:uee_taprobane/models/cardModel.dart';
-import 'package:uee_taprobane/screens/ForiegnUser/Deliver_details_screen.dart';
-import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
+import 'package:uee_taprobane/models/ItemPackageModel.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/wholeSale_Deliver_details_screen.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
-class DeliveryServiceSelectScreen extends StatefulWidget {  
-  final ItemModel itemModel;
+class WholeSaleDeliveryServiceSelectScreen extends StatefulWidget {  
+  final ItemPackageModel itemModel;
   final int quantity;
   final Key mapKey;
 
-    const DeliveryServiceSelectScreen(
+    const WholeSaleDeliveryServiceSelectScreen(
       {required this.itemModel,
       required this.quantity,
       required this.mapKey})
       : super(key: mapKey);
       
   @override  
-  _DeliveryServiceSelectScreenState createState() => _DeliveryServiceSelectScreenState();  
+  _WholeSaleDeliveryServiceSelectScreenState createState() => _WholeSaleDeliveryServiceSelectScreenState();  
 }  
   
-class _DeliveryServiceSelectScreenState extends State<DeliveryServiceSelectScreen> {  
+class _WholeSaleDeliveryServiceSelectScreenState extends State<WholeSaleDeliveryServiceSelectScreen> {  
 
 
-  ItemModel item = ItemModel();
+  ItemPackageModel item = ItemPackageModel();
   int? quantity;
   String deliveryService = "";
 
@@ -274,7 +266,7 @@ class _DeliveryServiceSelectScreenState extends State<DeliveryServiceSelectScree
                                   {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => DeliveryDetailsScreen( itemModel: item, quantity: quantity as int , deliveryService: deliveryService ,  mapKey: UniqueKey(), )),
+                                      MaterialPageRoute(builder: (context) => WholesaleDeliveryDetailsScreen( itemModel: item, quantity: quantity as int , deliveryService: deliveryService ,  mapKey: UniqueKey(), )),
                                     )
                                   }                                
                                 }, 

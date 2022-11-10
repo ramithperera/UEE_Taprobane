@@ -6,20 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/item_route.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
+import 'package:uee_taprobane/models/ItemPackageModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/payment_confirm_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/wholeSale_payment_confirm_screen.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
 class WholeSaleCartScreen extends StatefulWidget {  
-  final ItemModel itemModel;
+  final ItemPackageModel itemModel;
   final int quantity;
+  final int total_price;
   final Key mapKey;
 
     const WholeSaleCartScreen(
       {required this.itemModel,
       required this.quantity,
+      required this.total_price,
       required this.mapKey})
       : super(key: mapKey);
       
@@ -30,8 +34,9 @@ class WholeSaleCartScreen extends StatefulWidget {
 class _WholeSaleCartScreenState extends State<WholeSaleCartScreen> {  
 
 
-  ItemModel item = ItemModel();
+  ItemPackageModel item = ItemPackageModel();
   int? quantity;
+  int? total_price;
   int? total;
 
 
@@ -39,9 +44,10 @@ class _WholeSaleCartScreenState extends State<WholeSaleCartScreen> {
   void initState() {
     item = widget.itemModel;
     quantity = widget.quantity;
-    String onlyPrice = item.unit_price!.substring(1);
-    int price = int.parse(onlyPrice);
-    total  = price * widget.quantity;
+    // String onlyPrice = item.unit_price!.substring(1);
+    // int price = int.parse(onlyPrice);
+    // total  = price * widget.quantity;
+    total_price = widget.total_price;
     super.initState();
   }
 
@@ -138,7 +144,19 @@ class _WholeSaleCartScreenState extends State<WholeSaleCartScreen> {
                                       Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                          "Price : " + item.unit_price.toString(),
+                                          "Price : " + item.package_price.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20, 
+                                              fontWeight: FontWeight.bold,
+                                              color:Colors.black
+                                              ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          "Units  : " + item.no_units.toString(),
                                           style: const TextStyle(
                                               fontSize: 20, 
                                               fontWeight: FontWeight.bold,
@@ -219,7 +237,7 @@ class _WholeSaleCartScreenState extends State<WholeSaleCartScreen> {
                                   Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                       "\$"+total.toString(),
+                                       "\$"+total_price.toString(),
                                       style: const TextStyle(
                                           fontSize: 25, 
                                           fontWeight: FontWeight.bold,
@@ -276,7 +294,7 @@ class _WholeSaleCartScreenState extends State<WholeSaleCartScreen> {
                                 onPressed: ()=>{
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => PaymentConfirmScreen( itemModel: item, quantity: quantity as int ,  mapKey: UniqueKey(), )),
+                                    MaterialPageRoute(builder: (context) => WholeSalePaymentConfirmScreen( itemModel: item, quantity: quantity as int ,  mapKey: UniqueKey(), )),
                                   )                               
                                 }, 
                                 child: const Text(

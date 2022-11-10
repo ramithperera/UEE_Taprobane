@@ -9,22 +9,24 @@ import 'package:uee_taprobane/controller/deliveryAddress_route.dart';
 import 'package:uee_taprobane/controller/item_route.dart';
 import 'package:uee_taprobane/custom/custom_success_screeen.dart';
 import 'package:uee_taprobane/models/ItemModel.dart';
+import 'package:uee_taprobane/models/ItemPackageModel.dart';
 import 'package:uee_taprobane/models/cardModel.dart';
 import 'package:uee_taprobane/models/deliveryAddressModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/Delivery_service_select_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/Order_complete_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/single_product_view.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/WholeSale_Order_complete_screen.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
-class OrderConfirmScreen extends StatefulWidget {  
-  final ItemModel itemModel;
+class WholeSaleOrderConfirmScreen extends StatefulWidget {  
+  final ItemPackageModel itemModel;
   final int quantity;
   final String deliveryService;
   final Key mapKey;
 
-    const OrderConfirmScreen(
+    const WholeSaleOrderConfirmScreen(
       {required this.itemModel,
       required this.quantity,
       required this.deliveryService,
@@ -32,13 +34,13 @@ class OrderConfirmScreen extends StatefulWidget {
       : super(key: mapKey);
       
   @override  
-  _OrderConfirmScreenState createState() => _OrderConfirmScreenState();  
+  _WholeSaleOrderConfirmScreenState createState() => _WholeSaleOrderConfirmScreenState();  
 }  
   
-class _OrderConfirmScreenState extends State<OrderConfirmScreen> {  
+class _WholeSaleOrderConfirmScreenState extends State<WholeSaleOrderConfirmScreen> {  
 
 
-  ItemModel item = ItemModel();
+  ItemPackageModel item = ItemPackageModel();
   int? quantity;
   int? total;
   CardModel card = CardModel();
@@ -81,7 +83,7 @@ class _OrderConfirmScreenState extends State<OrderConfirmScreen> {
     item = widget.itemModel;
     quantity = widget.quantity;
     deliveryService = widget.deliveryService;
-    String onlyPrice = item.unit_price!.substring(1);
+    String onlyPrice = item.package_price!.substring(1);
     int price = int.parse(onlyPrice);
     total  = price * widget.quantity;
     deliveryChargers = 50;
@@ -302,7 +304,19 @@ class _OrderConfirmScreenState extends State<OrderConfirmScreen> {
                                       Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                          "Price : " + item.unit_price.toString(),
+                                          "Price : " + item.package_price.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20, 
+                                              fontWeight: FontWeight.bold,
+                                              color:Colors.black
+                                              ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          "Units  : " + item.no_units.toString(),
                                           style: const TextStyle(
                                               fontSize: 20, 
                                               fontWeight: FontWeight.bold,
@@ -507,7 +521,7 @@ class _OrderConfirmScreenState extends State<OrderConfirmScreen> {
                                 onPressed: ()=>{
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => OrderCompleteScreen(quantity: quantity as int, item:item,  totalPrice: subTotal as int, deliveryService: deliveryService as String , paymentMethod :card.ctype.toString() ,  mapKey: UniqueKey(), )),
+                                    MaterialPageRoute(builder: (context) => WholeSaleOrderCompleteScreen( totalPrice: subTotal as int, deliveryService: deliveryService as String , paymentMethod :card.ctype.toString() ,  mapKey: UniqueKey(), )),
                                   )                                
                                 }, 
                                 child: const Text(

@@ -344,14 +344,21 @@ class _PaymentDetailsInsertState extends State<PaymentDetailsInsert> {
       String? response = await userCardInsert(context, body);
       if (response != null) {
         showToastMessage('Add New Card Success!');
-      
-        Navigator.push(
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if(prefs.getString("userRole") == "wholesale_buyer")
+        {
+          Navigator.push(
+                context, MaterialPageRoute(builder: (context) => WholeSaleBuyerHome()));
+        }
+        else
+        {
+          Navigator.push(
                 context, MaterialPageRoute(builder: (context) => ForignUserHome()));
-
+        }
       }
       else
       {
-        showToastMessage('Register failed.Try again!');
+        showToastMessage('Add new Card failed.Try again!');
       }
     }
   }
