@@ -64,3 +64,20 @@ Future<String?> userCardUpdate(context, body , id) async {
     return null;
   }
 }
+
+Future<dynamic> deleteCardDetailsOfLoggedCustomer(context , id) async {
+  Uri uri = Uri.http(Api.baseUrl,Api.deleteCard + id);
+
+  //showLoadingDialog(context);
+  var response = await http.delete(uri,
+      headers: {"Accept": "application/json"});
+  //hideDialog(context);
+  if (response.statusCode == 200) {
+    Map<String, dynamic> details = jsonDecode(response.body);
+    print("inside cart route");
+    print(details["data"]);
+    return details["data"];
+  } else {
+    return null;
+  }
+}

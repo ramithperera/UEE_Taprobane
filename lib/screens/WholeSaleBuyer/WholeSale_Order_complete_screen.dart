@@ -19,13 +19,13 @@ import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
-class OrderCompleteScreen extends StatefulWidget {  
+class WholeSaleOrderCompleteScreen extends StatefulWidget {  
   final int totalPrice;
   final String deliveryService;
   final String paymentMethod;
   final Key mapKey;
 
-    const OrderCompleteScreen(
+    const WholeSaleOrderCompleteScreen(
       {required this.totalPrice,
       required this.paymentMethod,
       required this.deliveryService,
@@ -33,10 +33,10 @@ class OrderCompleteScreen extends StatefulWidget {
       : super(key: mapKey);
       
   @override  
-  _OrderCompleteScreenState createState() => _OrderCompleteScreenState();  
+  _WholeSaleOrderCompleteScreenState createState() => _WholeSaleOrderCompleteScreenState();  
 }  
   
-class _OrderCompleteScreenState extends State<OrderCompleteScreen> {  
+class _WholeSaleOrderCompleteScreenState extends State<WholeSaleOrderCompleteScreen> {  
 
 
 

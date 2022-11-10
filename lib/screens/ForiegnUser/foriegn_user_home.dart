@@ -95,7 +95,7 @@ class _ForignUserHomeState extends State<ForignUserHome> {
                     child:Container(
                       width: size.width *0.2,
                       child: Image.asset(                    
-                        "${imagePath}craftsman.png"
+                        "${imagePath}tap_logo.png"
                         ),
                       ),
                     ),
@@ -191,7 +191,7 @@ class _ForignUserHomeState extends State<ForignUserHome> {
                               Container(
                                 width: size.width * 0.3,
                                 child: Image.asset(                    
-                                  "${imagePath}craftsman.png"
+                                  "${imagePath}noimage.gif"
                                   ),
                                 ),
                               const SizedBox(height: 10,),
