@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uee_taprobane/controller/auth_route.dart';
+import 'package:uee_taprobane/screens/DeliveryPerson/delivery_person_home.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/foriegn_user_home.dart';
+import 'package:uee_taprobane/screens/Merchant/merchant_home.dart';
+import 'package:uee_taprobane/screens/WholeSaleBuyer/wholesale_buyer_home.dart';
+import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -11,6 +18,23 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
+  void getloggedUserDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString("_id");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getloggedUserDetails();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -92,7 +116,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: TextFormField(
-                              // controller: fullNameController,
+                              controller: nameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: const InputDecoration(
@@ -143,7 +167,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: TextFormField(
-                              // controller: fullNameController,
+                              controller: emailController,
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: TextInputAction.next,
                               decoration: const InputDecoration(
@@ -194,7 +218,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: TextFormField(
-                              // controller: fullNameController,
+                              controller: phoneController,
                               keyboardType: TextInputType.phone,
                               textInputAction: TextInputAction.next,
                               decoration: const InputDecoration(
@@ -245,7 +269,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: TextFormField(
-                              // controller: fullNameController,
+                              controller: addressController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: const InputDecoration(
@@ -287,7 +311,9 @@ class _EditProfileState extends State<EditProfile> {
                               borderRadius: BorderRadius.circular(20))),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        updateUserDetails();
+                      },
                       child: Text(
                         'Edit Profile',
                         style: GoogleFonts.roboto(
@@ -311,5 +337,78 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
     );
+  }
+
+ void updateUserDetails() async {
+    if (nameController.text.isEmpty) {
+      showToastMessage('Name Cannot be empty!');
+    }
+    if (emailController.text.isEmpty) {
+      showToastMessage('Email cannot be empty!');
+    }
+    if (phoneController.text.isEmpty) {
+      showToastMessage('Mobile number cannot be empty!');
+    }
+    if (addressController.text.isEmpty) {
+      showToastMessage('Location cannot be empty!');
+    }
+    else
+    {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      Map<String, String> body = {
+        'fullName': nameController.text,
+        'email': emailController.text,
+        'mobileno': phoneController.text,
+        'address': addressController.text,
+      };
+
+      print(body.toString());
+      String id = prefs.getString("_id").toString();
+      String? response = await userUpdate(context, body , id);
+      print(response.toString());
+      if (response != null) {
+        showToastMessage('Update Success!');
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if(prefs.getString("userRole") == "wholesale_buyer")
+        {
+          Navigator.push(
+                context, MaterialPageRoute(builder: (context) => WholeSaleBuyerHome()));
+        }
+        if(prefs.getString("userRole") == "foreign_user")
+        {
+          Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ForignUserHome()));
+        }
+        if(prefs.getString("userRole") == "merchant")
+        {
+          Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MerchantHome()));
+        }
+        if(prefs.getString("userRole") == "delivery_person")
+        {
+          Navigator.push(
+                context, MaterialPageRoute(builder: (context) => DeliveryPersonHome()));
+        }
+
+      }
+      else
+      {
+        showToastMessage('Update failed.Try again!');
+      }
+    }
+  }
+
+  void logoutfunc() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("_id");
+    prefs.remove("user");
+    prefs.remove("token");
+    prefs.remove("userRole");
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ));
   }
 }

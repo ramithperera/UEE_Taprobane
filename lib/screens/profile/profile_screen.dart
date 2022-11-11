@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uee_taprobane/controller/auth_route.dart';
 import 'package:uee_taprobane/controller/card_route.dart';
 import 'package:uee_taprobane/controller/deliveryAddress_route.dart';
 import 'package:uee_taprobane/custom/custom_confirm_dialog.dart';
+import 'package:uee_taprobane/models/MerchantModel.dart';
 import 'package:uee_taprobane/models/cardModel.dart';
 import 'package:uee_taprobane/models/deliveryAddressModel.dart';
+import 'package:uee_taprobane/models/deliveryPersonModel.dart';
+import 'package:uee_taprobane/models/foriegnUserModel.dart';
+import 'package:uee_taprobane/models/wholeSaleBuyerModel.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/Delivery_details_insert_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/Delivery_details_update_screen.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/Payment%20Details_insert_screen.dart';
@@ -26,8 +31,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   CardModel card = CardModel();
   DeliveryAddressModel deliveryAddressModel = DeliveryAddressModel();
 
+  DeliveryPersonModel deliveryPersonModel = DeliveryPersonModel();
+  ForeignUserModel foreignUserModel = ForeignUserModel();
+  WholeSaleBuyerModel wholeSaleBuyerModel = WholeSaleBuyerModel();
+  MerchantModel merchantModel = MerchantModel();
+
   bool cardHave = false;
   bool addressHave = false;
+  bool isDriver = false;
+  bool isMerchant = false;
+  bool isForeign = false;
+  bool isWholesale = false;
 
   void logoutfunc() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,6 +69,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
         cardHave = true;
       } else {
         cardHave = false;
+      }
+    });
+  }
+
+  // hgghj? asdsasd : asda? asdas: asd? asdasd: aasd
+
+  void getloggedUserProfileDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString("_id");
+    print(prefs.getString("_id"));
+    var res = await getUser(context, prefs.getString("_id"));
+    print(res["user"].toString());
+    setState(() {
+      if (res["user"]["userRole"] == "delivery_person") {
+        deliveryPersonModel = DeliveryPersonModel.fromJson(res["user"]);
+        isDriver = true;
+      }
+      if (res["user"]["userRole"] == "foreign_user") {
+        foreignUserModel = ForeignUserModel.fromJson(res["user"]);
+        isForeign = true;
+      }
+      if (res["user"]["userRole"] == "wholesale_buyer") {
+        wholeSaleBuyerModel = WholeSaleBuyerModel.fromJson(res["user"]);
+        isWholesale = true;
+      }
+      if (res["user"]["userRole"] == "merchant") {
+        merchantModel = MerchantModel.fromJson(res["user"]);
+        isMerchant = true;
       }
     });
   }
@@ -130,6 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     getloggedUserPaymentDetails();
     getloggedUserDeliveryAddressDetails();
+    getloggedUserProfileDetails();
   }
 
   @override
@@ -204,7 +247,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                           ),
                           Text(
-                            'Balsamic',
+                            isDriver
+                                ? deliveryPersonModel.fullName!
+                                : isForeign
+                                    ? foreignUserModel.fullName!
+                                    : isMerchant
+                                        ? merchantModel.fullName!
+                                        : isWholesale
+                                            ? wholeSaleBuyerModel.fullName!
+                                            : 'Balsamic',
                             style: GoogleFonts.roboto(
                                 textStyle: const TextStyle(
                               color: color33,
@@ -229,7 +280,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                           ),
                           Text(
-                            'Balsamic@gmail.com',
+                            isDriver
+                                ? deliveryPersonModel.email!
+                                : isForeign
+                                    ? foreignUserModel.email!
+                                    : isMerchant
+                                        ? merchantModel.email!
+                                        : isWholesale
+                                            ? wholeSaleBuyerModel.email!
+                                            : 'Balsamic@gmail.com',
                             style: GoogleFonts.roboto(
                                 textStyle: const TextStyle(
                               color: color33,
@@ -254,7 +313,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                           ),
                           Text(
-                            '0719866423',
+                            isDriver
+                                ? deliveryPersonModel.mobileno!
+                                : isForeign
+                                    ? foreignUserModel.mobileno!
+                                    : isMerchant
+                                        ? merchantModel.mobileno!
+                                        : isWholesale
+                                            ? wholeSaleBuyerModel.mobileno!
+                                            : '0719866423',
                             style: GoogleFonts.roboto(
                                 textStyle: const TextStyle(
                               color: color33,
@@ -279,7 +346,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                           ),
                           Text(
-                            'Dehiwala',
+                            isDriver
+                                ? deliveryPersonModel.address!
+                                : isForeign
+                                    ? foreignUserModel.address!
+                                    : isMerchant
+                                        ? merchantModel.address!
+                                        : isWholesale
+                                            ? wholeSaleBuyerModel.address!
+                                            : 'Dehiwala',
                             style: GoogleFonts.roboto(
                                 textStyle: const TextStyle(
                               color: color33,
@@ -456,8 +531,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       yesOnPressed: () {
         hideDialog(context);
         // cancelItem(orderLineModel);
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        deleteUser();
+        // Navigator.pushReplacement(
+        //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
       },
       noOnPressed: () {
         hideDialog(context);
@@ -466,5 +542,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       message: 'Are you sure you want to delete account?',
     );
     showDialog(context: context, builder: (BuildContext context) => baseDialog);
+  }
+
+  void deleteUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString("_id");
+    print(prefs.getString("_id"));
+    var res = await userDelete(context, prefs.getString("_id"));
+    if (res != null) {
+      showToastMessage('Delete User Success!');
+      Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    }
   }
 }
