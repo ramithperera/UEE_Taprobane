@@ -13,8 +13,8 @@ import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
 class EditHandicraft extends StatefulWidget {
-  final ItemModel itemModel;
-  EditHandicraft({Key? key, required this.itemModel}) : super(key: key);
+  final String itemID;
+  EditHandicraft({Key? key, required this.itemID}) : super(key: key);
 
   @override
   State<EditHandicraft> createState() => _EditHandicraftState();
@@ -27,11 +27,33 @@ class _EditHandicraftState extends State<EditHandicraft> {
   File? image;
   bool isPic = false;
   List<String> imgUrl = [];
+  ItemModel itemModel = ItemModel();
+
+  void getSingleItem() async {
+    var res = await getOneItemMerchant(context, widget.itemID);
+    print('getting single item $res');
+    print(res["Item"].toString());
+    setState(() {
+      itemModel = ItemModel.fromJson(res["Item"]);
+      print('haha' + itemModel.name!);
+      nameController.text = itemModel.name.toString();
+      descriptionController.text = itemModel.description.toString();
+      priceController.text = itemModel.unit_price.toString();
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSingleItem();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text(
           'Update Handicraft',
@@ -388,19 +410,16 @@ class _EditHandicraftState extends State<EditHandicraft> {
     }
     if (priceController.text.isEmpty) {
       showToastMessage('Price cannot be empty!');
-    }
-    else
-    {
-
+    } else {
       Map<String, String> body = {
         'name': nameController.text,
         'description': descriptionController.text,
         'unit_price': priceController.text,
-        'image_url': imgUrl[0]
+        'image_url': imgUrl.toString(),
         // 'owner':prefs.getString("_id").toString(),
       };
 
-      String? response = await updateItemMerchant(context, body, widget.itemModel.id);
+      String? response = await updateItemMerchant(context, body, widget.itemID);
       if (response != null) {
         showToastMessage('Add New Item Success!');
         Navigator.pushReplacement(
@@ -410,9 +429,7 @@ class _EditHandicraftState extends State<EditHandicraft> {
                       role: 'Handicraft',
                       status: 'Updated',
                     )));
-      }
-      else
-      {
+      } else {
         showToastMessage('Update Item failed.Try again!');
         Navigator.push(
             context,
@@ -424,5 +441,4 @@ class _EditHandicraftState extends State<EditHandicraft> {
       }
     }
   }
-
 }

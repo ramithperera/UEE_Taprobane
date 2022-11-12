@@ -35,6 +35,13 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    getAllItems();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -127,7 +134,14 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
                   imageUrl:
-                      'https://images.unsplash.com/photo-1629736048693-6bc25970ac36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1503&q=80',
+                      // 'https://images.unsplash.com/photo-1629736048693-6bc25970ac36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1503&q=80',
+                      item.image_url!,
+                  placeholder: (context, url) {
+                    return Image.asset('${imagePath}noimage.gif');
+                  },
+                  errorWidget: (context, url, error) {
+                    return Image.asset('${imagePath}noimage.gif');
+                  },
                   fit: BoxFit.cover,
                   height: 120,
                   memCacheHeight: 1500,
@@ -217,7 +231,7 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SingleOrderScreen()));
+                          builder: (context) => SingleOrderScreen(itemModel: item,)));
                 },
                 icon: Icon(Icons.library_books_rounded,
                     size: 30, color: Colors.black),

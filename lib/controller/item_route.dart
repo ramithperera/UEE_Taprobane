@@ -22,6 +22,23 @@ Future<dynamic> getAllItemsToForeignCustomer(context) async {
   }
 }
 
+Future<dynamic> getOneItemMerchant(context , id) async {
+  Uri uri = Uri.http(Api.baseUrl,Api.getOneItem + id);
+
+  //showLoadingDialog(context);
+  var response = await http.get(uri,
+      headers: {"Accept": "application/json"});
+  //hideDialog(context);
+  if (response.statusCode == 200) {
+    Map<String, dynamic> details = jsonDecode(response.body);
+    print("inside item route");
+    print(details["data"]);
+    return details["data"];
+  } else {
+    return null;
+  }
+}
+
 Future<String?> createItemMerchant(context, body) async {
   Uri uri = Uri.http(Api.baseUrl, Api.createItem);
 

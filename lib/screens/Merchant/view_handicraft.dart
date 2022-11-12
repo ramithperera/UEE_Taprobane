@@ -138,10 +138,10 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                       items.image_url!,
                   fit: BoxFit.cover,
                   placeholder: (context, url) {
-                    return Image.asset('$imagePath+noimage.gif');
+                    return Image.asset('${imagePath}noimage.gif');
                   },
                   errorWidget: (context, url, error) {
-                    return Image.asset('$imagePath+noimage.gif');
+                    return Image.asset('${imagePath}noimage.gif');
                   },
                   height: 120,
                   memCacheHeight: 1500,
@@ -231,7 +231,9 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditHandicraft(itemModel: items,)));
+                          builder: (context) => EditHandicraft(
+                                itemID: items.id!,
+                              )));
                 },
                 icon: Icon(Icons.edit_note_rounded,
                     size: 30, color: Colors.black),
