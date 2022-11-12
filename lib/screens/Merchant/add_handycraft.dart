@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uee_taprobane/controller/item_route.dart';
 import 'package:uee_taprobane/controller/product_route.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
 import 'package:uee_taprobane/custom/custom_failed_screen.dart';
@@ -20,6 +21,9 @@ class AddHandycraft extends StatefulWidget {
 }
 
 class _AddHandycraftState extends State<AddHandycraft> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   File? image;
   bool isPic = false;
   List<String> imgUrl = [];
@@ -100,7 +104,7 @@ class _AddHandycraftState extends State<AddHandycraft> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: TextFormField(
-                              // controller: fullNameController,
+                              controller: nameController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: const InputDecoration(
@@ -150,7 +154,7 @@ class _AddHandycraftState extends State<AddHandycraft> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: TextFormField(
-                            // controller: fullNameController,
+                            controller: descriptionController,
                             maxLines: 8,
                             keyboardType: TextInputType.multiline,
                             textInputAction: TextInputAction.next,
@@ -201,7 +205,7 @@ class _AddHandycraftState extends State<AddHandycraft> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: TextFormField(
-                              // controller: fullNameController,
+                              controller: priceController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: const InputDecoration(
@@ -318,10 +322,14 @@ class _AddHandycraftState extends State<AddHandycraft> {
                   alignment: FractionalOffset.bottomCenter,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CustomFailedScreen(role: 'Handicraft', status: 'Added',)));
+                      insertItem();
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => CustomFailedScreen(
+                      //               role: 'Handicraft',
+                      //               status: 'Added',
+                      //             )));
                     },
                     child: Text(
                       'Add Handicraft',
@@ -382,5 +390,48 @@ class _AddHandycraftState extends State<AddHandycraft> {
     imgUrl.add(imgRes);
     print('imgUrl haha');
     print(imgUrl);
+  }
+
+  void insertItem() async {
+    if (nameController.text.isEmpty) {
+      showToastMessage('Enter valid Name!');
+    }
+    if (descriptionController.text.isEmpty) {
+      showToastMessage('Description cannot be empty!');
+    }
+    if (priceController.text.isEmpty) {
+      showToastMessage('Price cannot be empty!');
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      Map<String, String> body = {
+        'name': nameController.text,
+        'description': descriptionController.text,
+        'unit_price': priceController.text,
+        'image_url': imgUrl[0],
+        'owner': prefs.getString("_id").toString()
+      };
+
+      String? response = await createItemMerchant(context, body);
+      if (response != null) {
+        showToastMessage('Add New Item Success!');
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomSuccessScreen(
+                      role: 'Handicraft',
+                      status: 'Added',
+                    )));
+      } else {
+        showToastMessage('Add new Item failed.Try again!');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomFailedScreen(
+                      role: 'Handicraft',
+                      status: 'Added',
+                    )));
+      }
+    }
   }
 }

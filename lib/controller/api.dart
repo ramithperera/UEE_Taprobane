@@ -13,6 +13,11 @@ class Api {
   static const String uploadProductImageApi = "/taprobane/product";
 
   static const String getAllItems = "/item/getAllItems";
+  static const String createItem = "/item/createItem";
+  static const String deleteItem = "/item/deleteItem/";
+  static const String updateItem = "/item/updateItem/";
+  static const String getOneItem = "/item/getItem/";
+
   static const String getCardDetailsByID = "/card/getCardById/";
   static const String getDeliveryAddressByID = "/delivery-address/getDeliveryAddressById/";
 
@@ -30,4 +35,6 @@ class Api {
   static const String createWholeSaleOrder = "";
 
   static const String getItemPackageDetails = "/item-packages/getItemPackage/";
+  static const String getAllItemPackages = "/item-packages/getAllItemsPackage";
+  static const String deleteItemPackage = "/item-packages/deleteItemPackage/";
 }
