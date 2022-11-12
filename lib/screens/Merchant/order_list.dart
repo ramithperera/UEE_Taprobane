@@ -22,15 +22,23 @@ class _OrderListScreenState extends State<OrderListScreen> {
   Future<dynamic> getAllItemPackagesDetails() async {
     dynamic data = await getAllItemPackages(context);
     print("Item Packages screen print");
-    print(data["ItemPackage"]);
-    for (var i = 0; i < data["ItemPackage"].length; i++) {
+    print(data["ItemPackages"]);
+    for (var i = 0; i < data["ItemPackages"].length; i++) {
       ItemPackageModel itemPackage =
-          ItemPackageModel.fromJson(data["ItemPackage"][i]);
+          ItemPackageModel.fromJson(data["ItemPackages"][i]);
       setState(() {
         itemPackages.add(itemPackage);
         itemCount++;
       });
     }
+    print('item count is $itemCount');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getAllItemPackagesDetails();
+    super.initState();
   }
 
   @override
@@ -75,7 +83,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: itemCount != 0 ? itemCount : 5,
+                  itemCount: itemCount,
+                  // itemCount: itemCount != 0 ? itemCount : 5,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),

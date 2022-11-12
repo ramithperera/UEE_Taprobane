@@ -32,6 +32,7 @@ class _AddHandycraftState extends State<AddHandycraft> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text(
           'Add New Handicraft',
@@ -408,7 +409,7 @@ class _AddHandycraftState extends State<AddHandycraft> {
         'name': nameController.text,
         'description': descriptionController.text,
         'unit_price': priceController.text,
-        'image_url': imgUrl[0],
+        'image_url': imgUrl.toString(),
         'owner': prefs.getString("_id").toString()
       };
 

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/auth_route.dart';
+import 'package:uee_taprobane/models/MerchantModel.dart';
+import 'package:uee_taprobane/models/deliveryPersonModel.dart';
+import 'package:uee_taprobane/models/foriegnUserModel.dart';
+import 'package:uee_taprobane/models/wholeSaleBuyerModel.dart';
 import 'package:uee_taprobane/screens/DeliveryPerson/delivery_person_home.dart';
 import 'package:uee_taprobane/screens/ForiegnUser/foriegn_user_home.dart';
 import 'package:uee_taprobane/screens/Merchant/merchant_home.dart';
@@ -18,6 +22,16 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  DeliveryPersonModel deliveryPersonModel = DeliveryPersonModel();
+  ForeignUserModel foreignUserModel = ForeignUserModel();
+  WholeSaleBuyerModel wholeSaleBuyerModel = WholeSaleBuyerModel();
+  MerchantModel merchantModel = MerchantModel();
+
+  bool isDriver = false;
+  bool isMerchant = false;
+  bool isForeign = false;
+  bool isWholesale = false;
+
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -26,6 +40,43 @@ class _EditProfileState extends State<EditProfile> {
   void getloggedUserDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.getString("_id");
+    print(prefs.getString("_id"));
+    var res = await getUser(context, prefs.getString("_id"));
+    print(res["user"].toString());
+    setState(() {
+      if (res["user"]["userRole"] == "delivery_person") {
+        deliveryPersonModel = DeliveryPersonModel.fromJson(res["user"]);
+        nameController.text = deliveryPersonModel.fullName.toString();
+        emailController.text = deliveryPersonModel.email.toString();
+        phoneController.text = deliveryPersonModel.mobileno.toString();
+        addressController.text = deliveryPersonModel.address.toString();
+        isDriver = true;
+      }
+      if (res["user"]["userRole"] == "foreign_user") {
+        foreignUserModel = ForeignUserModel.fromJson(res["user"]);
+        nameController.text = foreignUserModel.fullName.toString();
+        emailController.text = foreignUserModel.email.toString();
+        phoneController.text = foreignUserModel.mobileno.toString();
+        addressController.text = foreignUserModel.address.toString();
+        isForeign = true;
+      }
+      if (res["user"]["userRole"] == "wholesale_buyer") {
+        wholeSaleBuyerModel = WholeSaleBuyerModel.fromJson(res["user"]);
+        nameController.text = wholeSaleBuyerModel.fullName.toString();
+        emailController.text = wholeSaleBuyerModel.email.toString();
+        phoneController.text = wholeSaleBuyerModel.mobileno.toString();
+        addressController.text = wholeSaleBuyerModel.address.toString();
+        isWholesale = true;
+      }
+      if (res["user"]["userRole"] == "merchant") {
+        merchantModel = MerchantModel.fromJson(res["user"]);
+        nameController.text = merchantModel.fullName.toString();
+        emailController.text = merchantModel.email.toString();
+        phoneController.text = merchantModel.mobileno.toString();
+        addressController.text = merchantModel.address.toString();
+        isMerchant = true;
+      }
+    });
   }
 
   @override
@@ -339,7 +390,7 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
- void updateUserDetails() async {
+  void updateUserDetails() async {
     if (nameController.text.isEmpty) {
       showToastMessage('Name Cannot be empty!');
     }
@@ -351,9 +402,7 @@ class _EditProfileState extends State<EditProfile> {
     }
     if (addressController.text.isEmpty) {
       showToastMessage('Location cannot be empty!');
-    }
-    else
-    {
+    } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       Map<String, String> body = {
@@ -365,35 +414,28 @@ class _EditProfileState extends State<EditProfile> {
 
       print(body.toString());
       String id = prefs.getString("_id").toString();
-      String? response = await userUpdate(context, body , id);
+      String? response = await userUpdate(context, body, id);
       print(response.toString());
       if (response != null) {
         showToastMessage('Update Success!');
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        if(prefs.getString("userRole") == "wholesale_buyer")
-        {
-          Navigator.push(
-                context, MaterialPageRoute(builder: (context) => WholeSaleBuyerHome()));
+        if (prefs.getString("userRole") == "wholesale_buyer") {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => WholeSaleBuyerHome()));
         }
-        if(prefs.getString("userRole") == "foreign_user")
-        {
-          Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ForignUserHome()));
+        if (prefs.getString("userRole") == "foreign_user") {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => ForignUserHome()));
         }
-        if(prefs.getString("userRole") == "merchant")
-        {
+        if (prefs.getString("userRole") == "merchant") {
           Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MerchantHome()));
+              context, MaterialPageRoute(builder: (context) => MerchantHome()));
         }
-        if(prefs.getString("userRole") == "delivery_person")
-        {
-          Navigator.push(
-                context, MaterialPageRoute(builder: (context) => DeliveryPersonHome()));
+        if (prefs.getString("userRole") == "delivery_person") {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DeliveryPersonHome()));
         }
-
-      }
-      else
-      {
+      } else {
         showToastMessage('Update failed.Try again!');
       }
     }

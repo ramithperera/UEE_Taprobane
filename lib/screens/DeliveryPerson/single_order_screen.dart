@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:uee_taprobane/custom/custom_failed_screen.dart';
 import 'package:uee_taprobane/custom/custom_success_screeen.dart';
 import 'package:uee_taprobane/main.dart';
+import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
 class SingleOrderScreen extends StatefulWidget {
-  SingleOrderScreen({Key? key}) : super(key: key);
+  final ItemModel itemModel;
+  SingleOrderScreen({Key? key, required this.itemModel}) : super(key: key);
 
   @override
   State<SingleOrderScreen> createState() => _SingleOrderScreenState();
