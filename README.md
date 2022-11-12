@@ -1,20 +1,12 @@
-# uee_taprobane
+#Taprobane handcraft mobile application
 
-A new Flutter project.
+##This mobile aplication for Sri Lankan handcraft online buying and selling 
 
-This mobile aplication for Sri Lankan handcraft online buying and selling 
+Taprobane is the online platform that connects Sri Lankan handicrafts sellers and buyers and buyers which are in foreign and local. So, the purpose of this report is to create a handicraft shopping mobile application to promote Sri Lankan handcrafted goods. The majority of shopping sites concentrate on clothing, electronics, and other items, but nobody pays attention to handcrafted items. It is possible for customers (Local and Foreign) to directly purchase items from merchants via the Taprobane mobile application and this would help to Sri Lankan government to overcome dollar crisis and can uplift the living conditions of traditional handcrafters in Sri Lank
 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
+![image](https://user-images.githubusercontent.com/86922122/201483308-86556b0a-241e-4251-bcaa-a7e68a5231b5.png)
