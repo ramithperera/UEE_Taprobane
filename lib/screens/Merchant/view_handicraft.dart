@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uee_taprobane/controller/item_route.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
 import 'package:uee_taprobane/custom/custom_confirm_dialog.dart';
 import 'package:uee_taprobane/main.dart';
+import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/screens/Merchant/edit_handycraft.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
@@ -16,6 +18,29 @@ class ViewHandicraft extends StatefulWidget {
 }
 
 class _ViewHandicraftState extends State<ViewHandicraft> {
+  List<ItemModel> items = [];
+  int itemCount = 0;
+
+  Future<dynamic> getAllItems() async {
+    dynamic data = await getAllItemsToForeignCustomer(context);
+    print("Item screen print");
+    print(data["Items"]);
+    for (var i = 0; i < data["Items"].length; i++) {
+      ItemModel order = ItemModel.fromJson(data["Items"][i]);
+      setState(() {
+        items.add(order);
+        itemCount++;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getAllItems();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -83,11 +108,11 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 5,
+                  itemCount: itemCount != 0 ? itemCount : 5,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: handicraftList(size),
+                      child: handicraftList(size, items[index], index),
                     );
                   },
                 )
@@ -99,7 +124,7 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
     );
   }
 
-  Widget handicraftList(Size size) {
+  Widget handicraftList(Size size, ItemModel items, int num) {
     return CustomBoarderView(
       child: Column(
         children: [
@@ -109,8 +134,15 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
                   imageUrl:
-                      'https://images.unsplash.com/photo-1629736048693-6bc25970ac36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1503&q=80',
+                      // 'https://images.unsplash.com/photo-1629736048693-6bc25970ac36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1503&q=80',
+                      items.image_url!,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return Image.asset('$imagePath+noimage.gif');
+                  },
+                  errorWidget: (context, url, error) {
+                    return Image.asset('$imagePath+noimage.gif');
+                  },
                   height: 120,
                   memCacheHeight: 1500,
                 ),
@@ -129,7 +161,10 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                           fontStyle: FontStyle.normal,
                         )),
                         textAlign: TextAlign.left),
-                    Text('Pan wati dkcjdjcdjkdsjj vj nncjndncjknd lj',
+                    Text(
+                        itemCount != 0
+                            ? items.name!
+                            : 'Pan wati dkcjdjcdjkdsjj vj nncjndncjknd lj',
                         style: GoogleFonts.roboto(
                             textStyle: const TextStyle(
                           color: color33,
@@ -149,7 +184,9 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                         )),
                         textAlign: TextAlign.left),
                     Text(
-                        'Traditional Sri Lankan crafts are vital industries in many parts of the island',
+                        itemCount != 0
+                            ? items.description!
+                            : 'Traditional Sri Lankan crafts are vital industries in many parts of the island',
                         style: GoogleFonts.roboto(
                             textStyle: const TextStyle(
                           color: color33,
@@ -169,7 +206,7 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                               fontStyle: FontStyle.normal,
                             )),
                             textAlign: TextAlign.left),
-                        Text('80\$ ',
+                        Text(itemCount != 0 ? items.unit_price! : '80\$ ',
                             style: GoogleFonts.roboto(
                                 textStyle: const TextStyle(
                               color: color33,
@@ -194,7 +231,7 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => EditHandicraft()));
+                          builder: (context) => EditHandicraft(itemModel: items,)));
                 },
                 icon: Icon(Icons.edit_note_rounded,
                     size: 30, color: Colors.black),
@@ -204,7 +241,7 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
               ),
               ElevatedButton.icon(
                 onPressed: () {
-                  confirmDialog();
+                  confirmDialog(num);
                 },
                 icon: Icon(Icons.delete_outline_rounded,
                     size: 30, color: Colors.black),
@@ -226,9 +263,10 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
     );
   }
 
-  confirmDialog() {
+  confirmDialog(index) {
     var baseDialog = CustomConfirmDialog(
       yesOnPressed: () {
+        deleteHandicraft(index);
         hideDialog(context);
         // cancelItem(orderLineModel);
         Navigator.pop(context);
@@ -240,5 +278,10 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
       message: 'Are you sure you want to remove this handicraft?',
     );
     showDialog(context: context, builder: (BuildContext context) => baseDialog);
+  }
+
+  void deleteHandicraft(index) async {
+    var res = await deleteItemMerchant(context, items[index].id.toString());
+    showToastMessage('Delete Card Success!');
   }
 }

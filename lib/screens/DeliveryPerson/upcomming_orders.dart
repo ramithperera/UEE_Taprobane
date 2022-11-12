@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uee_taprobane/controller/item_route.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
 import 'package:uee_taprobane/custom/custom_confirm_dialog.dart';
 import 'package:uee_taprobane/main.dart';
+import 'package:uee_taprobane/models/ItemModel.dart';
 import 'package:uee_taprobane/screens/DeliveryPerson/single_order_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
@@ -16,6 +18,22 @@ class UpcommingOrders extends StatefulWidget {
 }
 
 class _UpcommingOrdersState extends State<UpcommingOrders> {
+  List<ItemModel> items = [];
+  int itemCount = 0;
+
+  Future<dynamic> getAllItems() async {
+    dynamic data = await getAllItemsToForeignCustomer(context);
+    print("Item screen print");
+    print(data["Items"]);
+    for (var i = 0; i < data["Items"].length; i++) {
+      ItemModel order = ItemModel.fromJson(data["Items"][i]);
+      setState(() {
+        items.add(order);
+        itemCount++;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -83,11 +101,11 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 5,
+                  itemCount: itemCount != 0 ? itemCount : 5,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: handicraftList(size),
+                      child: handicraftList(size, items[index]),
                     );
                   },
                 )
@@ -99,7 +117,7 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
     );
   }
 
-  Widget handicraftList(Size size) {
+  Widget handicraftList(Size size, ItemModel item) {
     return CustomBoarderView(
       child: Column(
         children: [
@@ -129,7 +147,10 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
                           fontStyle: FontStyle.normal,
                         )),
                         textAlign: TextAlign.left),
-                    Text('Pan wati dkcjdjcdjkdsjj vj nncjndncjknd lj',
+                    Text(
+                        itemCount != 0
+                            ? item.name!
+                            : 'Pan wati dkcjdjcdjkdsjj vj nncjndncjknd lj',
                         style: GoogleFonts.roboto(
                             textStyle: const TextStyle(
                           color: color33,
@@ -149,7 +170,9 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
                         )),
                         textAlign: TextAlign.left),
                     Text(
-                        'Traditional Sri Lankan crafts are vital industries in many parts of the island',
+                        itemCount != 0
+                            ? item.description!
+                            : 'Traditional Sri Lankan crafts are vital industries in many parts of the island',
                         style: GoogleFonts.roboto(
                             textStyle: const TextStyle(
                           color: color33,
@@ -169,7 +192,7 @@ class _UpcommingOrdersState extends State<UpcommingOrders> {
                               fontStyle: FontStyle.normal,
                             )),
                             textAlign: TextAlign.left),
-                        Text('80\$ ',
+                        Text(itemCount != 0 ? item.unit_price! : '80\$ ',
                             style: GoogleFonts.roboto(
                                 textStyle: const TextStyle(
                               color: color33,

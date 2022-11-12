@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uee_taprobane/controller/ItemPackage_route.dart';
 import 'package:uee_taprobane/custom/custom_border_view.dart';
 import 'package:uee_taprobane/custom/custom_confirm_dialog.dart';
 import 'package:uee_taprobane/main.dart';
+import 'package:uee_taprobane/models/ItemPackageModel.dart';
 import 'package:uee_taprobane/utils/constants.dart';
 import 'package:uee_taprobane/utils/widget_functions.dart';
 
@@ -14,6 +16,23 @@ class OrderListScreen extends StatefulWidget {
 }
 
 class _OrderListScreenState extends State<OrderListScreen> {
+  List<ItemPackageModel> itemPackages = [];
+  int itemCount = 0;
+
+  Future<dynamic> getAllItemPackagesDetails() async {
+    dynamic data = await getAllItemPackages(context);
+    print("Item Packages screen print");
+    print(data["ItemPackage"]);
+    for (var i = 0; i < data["ItemPackage"].length; i++) {
+      ItemPackageModel itemPackage =
+          ItemPackageModel.fromJson(data["ItemPackage"][i]);
+      setState(() {
+        itemPackages.add(itemPackage);
+        itemCount++;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -56,11 +75,11 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 5,
+                  itemCount: itemCount != 0 ? itemCount : 5,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: orderContainer(size),
+                      child: orderContainer(size, itemPackages[index], index),
                     );
                   },
                 )
@@ -72,7 +91,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
     );
   }
 
-  Widget orderContainer(Size size) {
+  Widget orderContainer(Size size, ItemPackageModel itemPackage, int num) {
     return CustomBoarderView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -91,7 +110,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     )),
                     textAlign: TextAlign.left),
                 addHorizontalSpace(100),
-                Text('9029239839 ',
+                Text(itemCount != 0 ? itemPackage.package_id! : '9029239839 ',
                     style: GoogleFonts.roboto(
                         textStyle: const TextStyle(
                       color: color33,
@@ -114,7 +133,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     )),
                     textAlign: TextAlign.left),
                 addHorizontalSpace(30),
-                Text('Pan wati ',
+                Text(itemCount != 0 ? itemPackage.name! : 'Pan wati ',
                     style: GoogleFonts.roboto(
                         textStyle: const TextStyle(
                       color: color33,
@@ -125,29 +144,29 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     textAlign: TextAlign.left),
               ],
             ),
-            Row(
-              children: [
-                Text('Customer Name: ',
-                    style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                      color: color33,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      fontStyle: FontStyle.normal,
-                    )),
-                    textAlign: TextAlign.left),
-                addHorizontalSpace(35),
-                Text('Ramith ',
-                    style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                      color: color33,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      fontStyle: FontStyle.normal,
-                    )),
-                    textAlign: TextAlign.left),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Text('Customer Name: ',
+            //         style: GoogleFonts.roboto(
+            //             textStyle: const TextStyle(
+            //           color: color33,
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.w700,
+            //           fontStyle: FontStyle.normal,
+            //         )),
+            //         textAlign: TextAlign.left),
+            //     addHorizontalSpace(35),
+            //     Text('Ramith ',
+            //         style: GoogleFonts.roboto(
+            //             textStyle: const TextStyle(
+            //           color: color33,
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.w700,
+            //           fontStyle: FontStyle.normal,
+            //         )),
+            //         textAlign: TextAlign.left),
+            //   ],
+            // ),
             Row(
               children: [
                 Text('Quantity of items: ',
@@ -160,7 +179,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     )),
                     textAlign: TextAlign.left),
                 addHorizontalSpace(25),
-                Text('10',
+                Text(itemCount != 0 ? itemPackage.no_units! : '10',
                     style: GoogleFonts.roboto(
                         textStyle: const TextStyle(
                       color: color33,
@@ -171,29 +190,29 @@ class _OrderListScreenState extends State<OrderListScreen> {
                     textAlign: TextAlign.left),
               ],
             ),
-            Row(
-              children: [
-                Text('Date: ',
-                    style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                      color: color33,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      fontStyle: FontStyle.normal,
-                    )),
-                    textAlign: TextAlign.left),
-                addHorizontalSpace(128),
-                Text('2022/11/05',
-                    style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(
-                      color: color33,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      fontStyle: FontStyle.normal,
-                    )),
-                    textAlign: TextAlign.left),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Text('Date: ',
+            //         style: GoogleFonts.roboto(
+            //             textStyle: const TextStyle(
+            //           color: color33,
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.w700,
+            //           fontStyle: FontStyle.normal,
+            //         )),
+            //         textAlign: TextAlign.left),
+            //     addHorizontalSpace(128),
+            //     Text('2022/11/05',
+            //         style: GoogleFonts.roboto(
+            //             textStyle: const TextStyle(
+            //           color: color33,
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.w700,
+            //           fontStyle: FontStyle.normal,
+            //         )),
+            //         textAlign: TextAlign.left),
+            //   ],
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -216,7 +235,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    confirmDialog();
+                    confirmDialog(num);
                   },
                   child: Text(
                     'Reject',
@@ -248,9 +267,10 @@ class _OrderListScreenState extends State<OrderListScreen> {
     );
   }
 
-  confirmDialog() {
+  confirmDialog(index) {
     var baseDialog = CustomConfirmDialog(
       yesOnPressed: () {
+        deleteOrder(index);
         hideDialog(context);
         // cancelItem(orderLineModel);
         Navigator.pop(context);
@@ -262,5 +282,11 @@ class _OrderListScreenState extends State<OrderListScreen> {
       message: 'Are you sure you want to cancel this order?',
     );
     showDialog(context: context, builder: (BuildContext context) => baseDialog);
+  }
+
+  void deleteOrder(index) async {
+    var res = await deleteItemPackage(
+        context, itemPackages[index].Item_id.toString());
+    showToastMessage('Delete Card Success!');
   }
 }
