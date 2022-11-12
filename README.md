@@ -8,8 +8,5 @@ Taprobane is the online platform that connects Sri Lankan handicrafts sellers an
 
 This project is a starting point for a Flutter application.
 
-
-![image](https://user-images.githubusercontent.com/86922122/201483308-86556b0a-241e-4251-bcaa-a7e68a5231b5.png)
 ![image](https://user-images.githubusercontent.com/86922122/201483366-7ffcc611-1922-401c-a0ed-0751d1ef1c86.png)
-![image](https://user-images.githubusercontent.com/86922122/201483383-93476095-8bae-4b8b-9a23-0286fb48d83f.png)
-![image](https://user-images.githubusercontent.com/86922122/201483400-08270fe5-9cb2-4153-99dd-70655ae329b0.png)
+
