@@ -10,7 +10,7 @@ class Api {
   static const String userRemoveApi = "/taprobane/delete-user/";
   static const String userUpdateApi = "/taprobane/update-user/";
   static const String getUserApi = "/taprobane/getUser/";
-  static const String uploadProductImageApi = "/taprobane/product";
+  static const String uploadProductImageApi = "/product-image/upload";
 
   static const String getAllItems = "/item/getAllItems";
   static const String createItem = "/item/createItem";
