@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uee_taprobane/controller/deliveryAddress_route.dart';
 import 'package:uee_taprobane/models/ItemPackageModel.dart';
 import 'package:uee_taprobane/models/deliveryAddressModel.dart';
+import 'package:uee_taprobane/screens/ForiegnUser/Delivery_details_update_screen.dart';
 import 'package:uee_taprobane/screens/WholeSaleBuyer/WholeSale_Order_confirm_screen.dart';
 import 'package:uee_taprobane/screens/auth/login_screen.dart';
 import 'package:uee_taprobane/utils/constants.dart';
@@ -295,10 +296,10 @@ class _WholesaleDeliveryDetailsScreenState extends State<WholesaleDeliveryDetail
                                           children: [
                                             TextButton(                              
                                               onPressed: ()=>{
-                                                // Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(builder: (context) => CustomSuccessScreen( role: userName, status: "payment", )),
-                                                // )                                
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => DeliveryDetailsUpdate()),
+                                                )                                
                                               }, 
                                               child: const Text(
                                                 "Edit Delivery Details",

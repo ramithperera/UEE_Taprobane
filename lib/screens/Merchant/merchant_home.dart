@@ -89,14 +89,14 @@ class _MerchantHomeState extends State<MerchantHome> {
       ),
       body: Column(children: [
         const SizedBox(
-          height: 10,
+          height: 20,
         ),
         Container(
           width: size.width,
           height: size.height * 0.3,
           child: Center(
             child: Image.asset(
-              imagePath + 'craftsman.png',
+              imagePath + 'tap_logo.png',
               width: 250,
             ),
           ),

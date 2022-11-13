@@ -34,8 +34,7 @@ class _EditHandicraftState extends State<EditHandicraft> {
     print('getting single item $res');
     print(res["Item"].toString());
     setState(() {
-      itemModel = ItemModel.fromJson(res["Item"]);
-      print('haha' + itemModel.name!);
+      itemModel = ItemModel.fromJson(res["Item"][0]);
       nameController.text = itemModel.name.toString();
       descriptionController.text = itemModel.description.toString();
       priceController.text = itemModel.unit_price.toString();
@@ -44,7 +43,6 @@ class _EditHandicraftState extends State<EditHandicraft> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSingleItem();
   }

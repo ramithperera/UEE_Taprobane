@@ -136,12 +136,22 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                   imageUrl:
                       // 'https://images.unsplash.com/photo-1629736048693-6bc25970ac36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1503&q=80',
                       items.image_url!,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   placeholder: (context, url) {
-                    return Image.asset('${imagePath}noimage.gif');
+                    return Container(
+                      width: 200,
+                      height: 200,
+                      padding: const EdgeInsets.all(10),
+                      child : Image.asset('${imagePath}handicraft.png'),
+                    );
                   },
                   errorWidget: (context, url, error) {
-                    return Image.asset('${imagePath}noimage.gif');
+                    return Container(
+                      width: 200,
+                      height: 200,
+                      padding: const EdgeInsets.all(10),
+                      child : Image.asset('${imagePath}handicraft.png'),
+                    );
                   },
                   height: 120,
                   memCacheHeight: 1500,
