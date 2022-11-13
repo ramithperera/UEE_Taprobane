@@ -108,7 +108,8 @@ class _ViewHandicraftState extends State<ViewHandicraft> {
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: itemCount != 0 ? itemCount : 5,
+                  itemCount: itemCount,
+                  // itemCount: itemCount != 0 ? itemCount : 5,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
